@@ -40,8 +40,8 @@ jobs:
 
       - name: 推送公开镜像
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --quiet || git commit -m "mirror: sync sanitized content"
           git push --force https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/Angel-Hair/ai-inkwell-public.git main
