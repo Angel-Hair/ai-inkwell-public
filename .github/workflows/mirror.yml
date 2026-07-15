@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: 用脱敏版本替换原始报告
         run: |
