@@ -38,8 +38,8 @@ inkwell/
 
 - 不执行 `npm install`、`pip install` 等任何包管理/构建命令
 - 不在 `sources/` 目录中存放 AI 自己整理、归纳、改写后的 md 文件
-- 不要建议添加 CI/CD、自动化测试等工程设施
 - 修改报告后不要覆盖原始版本，先另存为新版本
+- 不经 inkwell Skill 确认过脱敏信息就直接执行 `git commit` 和 `git push`
 
 ## 双仓架构
 
