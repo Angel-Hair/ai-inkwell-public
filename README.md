@@ -11,13 +11,19 @@
 
 ## 你要如何使用
 
-`clone` 后的一些步骤：
+纯手动（太麻烦，不推荐）：
+
+<details>
+<summary> clone 后的一些步骤</summary>
 
 1. 删掉 `reports/` 下我的报告
 2. 去 GitHub 新建一个私有仓和一个公开空仓，把 clone 下来的目录关联到私有仓
 3. 把 `AGENTS.md`、`.codewhale/skills/inkwell/SKILL.md`、`.github/workflows/mirror.yml` 里的仓库路径、用户名改成你的
 4. 在私有仓 Settings → Secrets and variables → Actions 添加 `PUBLIC_REPO_TOKEN`——Fine-grained PAT，给公开仓 Contents 读写权限就行
 5. push 到 main，看 Actions 是否跑通
+
+</details>
+<br>
 
 或者直接让AI帮你解决（**推荐**）：
 
