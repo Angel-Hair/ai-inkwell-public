@@ -36,7 +36,7 @@ jobs:
 
       - name: 移除私有文件和临时目录
         run: |
-          rm -rf sources/ tmp/
+          rm -rf sources/ tmp/ .github/
 
       - name: 推送公开镜像
         run: |
