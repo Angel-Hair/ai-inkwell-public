@@ -13,5 +13,8 @@ desktop.ini
 # CodeWhale 运行时状态
 .codewhale/state/
 
+# Playwright MCP 内部缓存
+.playwright-mcp/
+
 # 临时文件
 tmp/
