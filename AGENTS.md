@@ -6,20 +6,25 @@
 
 ```
 inkwell/
-├── reports/                  ← 每个研究报告独立子目录
-│   └── <report-name>/
-│       ├── <name>.html              # 报告正文
-│       ├── <name>-sanitized.html    # 脱敏版本
-│       └── AGENTS.md                # 该报告的子项目指令
+├── .github/workflows/        ← GitHub Actions（双仓同步脚本）
+├── .codewhale/skills/        ← CodeWhale Skill 定义
+├── .gitignore
+├── reports/                  ← 研究报告总目录
+│   └── <report-name>/        ← 每个研究报告独立子目录
+│       ├── <name>.html或者<name>.md   # 报告正文
+│       ├── <name>-sanitized.<ext>     # 脱敏版本
+│       └── AGENTS.md                  # 该报告的主题、用户需求、格式要求、约束等
 ├── sources/                  ← 仅存放通过工具拉取/下载的原始文件
 │                               （网页源码、PDF、图片等，不能放 AI 整理后的 md）
 ├── tmp/                      ← 运行过程产生的所有临时文件
-└── AGENTS.md                 ← 本文件
+├── AGENTS.md                 ← 本文件
+├── README.md
+└── LICENSE
 ```
 
 ## 工作流
 
-- 先给大纲或目录结构，经我确认后再展开细节
+- 先给大纲或目录结构，经用户确认后再展开细节
 - 涉及事实、数据、日期等信息时必须搜索验证并引用来源
 - 不确定的结论必须主动标注，不要装成已知事实
 
