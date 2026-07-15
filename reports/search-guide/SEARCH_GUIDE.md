@@ -6,7 +6,7 @@
 
 | 工具 | 状态 | 后端 |
 |---|---|---|
-| `mcp_searxng_web_search` | ✅ 推荐 | SearXNG @ 107.182.25.64:8814，通过 MCP 插件 `@kevinwatt/mcp-server-searxng` 接入。聚合 Google+Bing+Wikipedia+DDG |
+| `mcp_searxng_web_search` | ✅ 推荐 | SearXNG @ <SearXNG服务器地址>:<SearXNG端口>，通过 MCP 插件 `@kevinwatt/mcp-server-searxng` 接入。聚合 Google+Bing+Wikipedia+DDG |
 | `web_search`（内置） | ❌ 已禁用 | 默认 DDG HTML + Bing fallback。DDG 返回 bot challenge（GitHub Issue #964），Bing fallback 返回垃圾结果，不可用 |
 | `fetch_url` | ✅ 可用 | HTTP GET 直连 URL，HTML 剥离为纯文本。不执行 JS，只能抓服务端渲染页面。走 Clash 代理 |
 | `web.run`（内置） | ❌ 已禁用 | 搜索端同 `web_search`（受 DDG bot challenge 影响），open/click/find 不执行 JS。功能已被 `fetch_url` + Playwright MCP 全覆盖 |
@@ -20,7 +20,7 @@
 ```
 CodeWhale 桌面端
   └─ MCP 子进程 (npx @kevinwatt/mcp-server-searxng)
-       └─ HTTP POST /search (JSON API) → SearXNG @ 107.182.25.64
+       └─ HTTP POST /search (JSON API) → SearXNG @ <SearXNG服务器地址>
             └─ 并行查询: Google + Bing + Wikipedia + DuckDuckGo + ...
                  → 聚合、去重 → 返回 JSON 结果
 ```
@@ -134,8 +134,8 @@ CodeWhale 桌面端
 ### SearXNG
 
 ```
-服务器：Debian 13 x86_64 @ 107.182.25.64
-端口：8814（非标准高位端口，防批量扫描）
+服务器：Debian 13 x86_64 @ <SearXNG服务器地址>
+端口：<SearXNG端口>（非标准高位端口，防批量扫描）
 反向代理：nginx → uwsgi → SearXNG
 搜索路径：/search（/searxng 路径已从 nginx 移除）
 静态文件：nginx 直接 serve /static/
@@ -156,14 +156,14 @@ CodeWhale 桌面端
 
 ```
 默认：deny incoming, allow outgoing
-开放端口：26545 (SSH), 8814 (SearXNG)
+开放端口：<SSH端口> (SSH), <SearXNG端口> (SearXNG)
 ```
 
 ### CodeWhale 配置
 
 #### 禁用了内置 `web_search` 和 `web.run`
 
-在 `C:\Users\<用户名>\.codewhale\config.toml` 中添加：
+在 `<CodeWhale配置路径>` 中添加：
 
 ```toml
 [tools.overrides]
@@ -176,8 +176,8 @@ CodeWhale 桌面端
 ### Clash Party
 
 ```
-代理：127.0.0.1:7890
-配置路径：%APPDATA%\mihomo-party\
+代理：127.0.0.1:<代理端口>
+配置路径：<Clash配置目录>
 ```
 
 ## AI 决策流程
