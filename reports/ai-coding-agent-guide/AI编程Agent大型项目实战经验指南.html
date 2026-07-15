@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 编程 Agent 大型项目实战经验指南（2026）</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2129;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #c9d1d9;
+    --text3: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #3fb950;
+    --orange: #d2991d;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --cyan: #39d2c0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  /* Header */
+  .hero {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 50px;
+  }
+  .hero h1 {
+    font-size: 2.4em;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .hero .subtitle {
+    color: var(--text3);
+    font-size: 1.05em;
+    margin-bottom: 8px;
+  }
+  .hero .meta {
+    font-size: 0.85em;
+    color: var(--text3);
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .hero .meta span {
+    background: var(--surface);
+    padding: 3px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  /* Executive summary */
+  .summary-box {
+    background: linear-gradient(135deg, #1a2332, #1a1f2e);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .summary-box h2 { color: var(--accent2); font-size: 1.2em; margin-bottom: 14px; }
+  .summary-box ul { list-style: none; }
+  .summary-box li { padding: 6px 0; position: relative; padding-left: 20px; }
+  .summary-box li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+
+  /* Sections */
+  section { margin-bottom: 48px; }
+  h2 {
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    color: var(--accent2);
+  }
+  h3 {
+    font-size: 1.2em;
+    margin: 28px 0 12px;
+    color: var(--text);
+  }
+  h4 {
+    font-size: 1em;
+    margin: 18px 0 8px;
+    color: var(--accent);
+  }
+  p { margin-bottom: 14px; color: var(--text2); }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .card-icon { font-size: 1.8em; margin-bottom: 10px; }
+  .card h4 { margin-top: 0; font-size: 1em; }
+  .card p { font-size: 0.9em; color: var(--text3); margin-bottom: 0; }
+
+  /* Author cards */
+  .author-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .author-card .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4em; font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .author-card .info h4 { margin: 0 0 4px; font-size: 1.05em; }
+  .author-card .info .role { font-size: 0.85em; color: var(--accent); margin-bottom: 8px; }
+  .author-card .info .stats { font-size: 0.82em; color: var(--text3); }
+  .author-card .info .stats strong { color: var(--green); }
+
+  /* Quote */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 12px 20px;
+    margin: 18px 0;
+    background: rgba(88,166,255,0.06);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--text2);
+  }
+  blockquote strong { color: var(--accent2); font-style: normal; }
+
+  /* Comparison tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 0.92em;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent2);
+    font-weight: 600;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Code */
+  code {
+    background: var(--surface2);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.88em;
+    color: var(--orange);
+  }
+  pre {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.85em;
+    line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; color: var(--text2); }
+
+  /* Tips */
+  .tip {
+    background: rgba(63,185,80,0.08);
+    border: 1px solid rgba(63,185,80,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip::before { content: "✅ "; }
+  .warning {
+    background: rgba(248,81,73,0.08);
+    border: 1px solid rgba(248,81,73,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warning::before { content: "⚠️ "; }
+
+  /* Data highlight */
+  .data-highlight {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .data-highlight.green { color: var(--green); border-color: rgba(63,185,80,0.4); }
+  .data-highlight.red { color: var(--red); border-color: rgba(248,81,73,0.4); }
+  .data-highlight.orange { color: var(--orange); border-color: rgba(210,153,29,0.4); }
+
+  /* Roadmap */
+  .roadmap { counter-reset: step; }
+  .roadmap-item {
+    counter-increment: step;
+    padding: 16px 20px 16px 60px;
+    margin: 10px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+  }
+  .roadmap-item::before {
+    content: counter(step);
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    width: 30px; height: 30px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+  }
+  .roadmap-item h4 { margin: 0 0 6px; }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border);
+    color: var(--text3);
+    font-size: 0.85em;
+    text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .toc { 
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .toc h3 { margin-top: 0; font-size: 1.05em; color: var(--text); }
+  .toc ol { margin-left: 18px; }
+  .toc li { padding: 3px 0; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .container { padding: 30px 14px; }
+    .hero h1 { font-size: 1.6em; }
+    .author-card { flex-direction: column; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ======= HERO ======= -->
+<div class="hero">
+  <h1>AI 编程 Agent 大型项目实战经验指南</h1>
+  <p class="subtitle">从 Vibe Coding 到 Agent Engineering —— 社区大佬怎么说</p>
+  <p class="meta">
+    <span>📅 2026 年 7 月</span>
+    <span>📚 基于 30+ 社区来源</span>
+    <span>⭐ 覆盖 25K~60K Star 项目作者经验</span>
+    <span>🧪 含 Anthropic 官方研究数据</span>
+  </p>
+</div>
+
+<!-- ======= EXECUTIVE SUMMARY ======= -->
+<div class="summary-box">
+  <h2>📋 核心结论</h2>
+  <ul>
+    <li><strong>你的 AI 编程水平，决定了 AI 能帮你多少。</strong>Anthropic 官方研究：专家级用户任务成功率 28-33%，新手仅 15%。遇到困难时，专家 15% 能翻盘，新手仅 4%。</li>
+    <li><strong>Vibe Coding 是玩具，Agent Engineering 才是武器。</strong>GitHub Trending #1 仓库（25K Star）总结的核心分野：约束来源从"提示词"变为"配置"，验证从"肉眼"变为"自动钩子"。</li>
+    <li><strong>CLAUDE.md / instructions.md 是第一道防线——但 60 行最优，200 行上限。</strong>Boris Cherny（Claude Code 创建者）团队实测：超过 200 行后规则被悄悄降权。</li>
+    <li><strong>Skill 有价值，但 85% 社区 Skill 是垃圾。</strong>工程师实测 47 个只有 7 个值得装。Custom Skill 远优于社区现成的——Matt Pocock 的 21 个 Skill 之所以 60K Star，不是因为他写了什么，而是因为他展示了「怎么写」。</li>
+    <li><strong>Git Worktree 并行 + Plan Mode + Stop 钩子验证 = 生产力三件套。</strong>Boris Cherny 同时跑 5-10 个 Agent 实例，Anthropic 工程师用这套方法论每天产出 8 倍代码。</li>
+  </ul>
+</div>
+
+<!-- ======= TOC ======= -->
+<div class="toc">
+  <h3>📑 目录</h3>
+  <ol>
+    <li><a href="#authors">社区大佬及其背景</a></li>
+    <li><a href="#vibe-vs-agent">Vibe Coding vs Agent Engineering：核心认知分野</a></li>
+    <li><a href="#anthropic-data">硬数据：Anthropic 官方研究——专业水平决定成功率</a></li>
+    <li><a href="#instructions">项目配置文件：CLAUDE.md / instructions.md 的正确姿势</a></li>
+    <li><a href="#context">上下文管理：比你想的重要 10 倍</a></li>
+    <li><a href="#plan-mode">Plan Mode：复杂任务的方向保险</a></li>
+    <li><a href="#permissions">权限控制：从"每次点允许"到"配置级约束"</a></li>
+    <li><a href="#verification">验证机制："完成"不代表真的完成</a></li>
+    <li><a href="#testing-frameworks">给 AI Agent 用的测试框架推荐</a></li>
+    <li><a href="#parallel">并行化与 Worktree：生产力的最大杠杆</a></li>
+    <li><a href="#git">Git 工作流：让 Agent 管理提交</a></li>
+    <li><a href="#skills-guide">Skill 到底要不要用？社区实测与决策框架</a></li>
+    <li><a href="#large-project">大型项目特有的策略</a></li>
+    <li><a href="#cost">Token 成本管理</a></li>
+    <li><a href="#anti-patterns">高频踩坑与反模式清单</a></li>
+    <li><a href="#roadmap">渐进式路线图</a></li>
+    <li><a href="#sources">信息来源与参考文献</a></li>
+  </ol>
+</div>
+
+<!-- ======= SECTION 1: AUTHORS ======= -->
+<section id="authors">
+  <h2>一、这些经验的来源：你需要重视谁</h2>
+
+  <div class="author-card">
+    <div class="avatar">BC</div>
+    <div class="info">
+      <h4>Boris Cherny</h4>
+      <p class="role">Claude Code 创建者 · Anthropic Head of Claude Code · O'Reilly《Programming TypeScript》作者</p>
+      <p class="stats">前 Meta 首席工程师（IC8）· 他的 X 线程 850 万浏览量 · Claude Code 年收入 $10 亿 · <strong>146 条公开技巧</strong></p>
+      <p>核心主张："Pour your energy into the plan so Claude can 1-shot the implementation." 同时跑 5+ 个并行 Agent 实例。Anthropic 内部工程师用这套方法论每天产出 8 倍代码，Claude 撰写了超过 80% 的合并代码。</p>
+    </div>
+  </div>
+
+  <div class="author-card">
+    <div class="avatar">MP</div>
+    <div class="info">
+      <h4>Matt Pocock</h4>
+      <p class="role">TypeScript 教育家 · Total TypeScript 创始人 · 前 Vercel / Stately</p>
+      <p class="stats">mattpocock/skills <strong>60K+ Star</strong> · GitHub Trending 多日第一 · 21 个生产级 Skill</p>
+      <p>核心主张："Skills for Real Engineers. Not vibe coding." 他的 Skills 不依赖 TypeScript，依赖通用工程原则——需求对齐、共享语言、反馈闭环、架构治理。社区称其为"AI 时代的工程规范圣经"。</p>
+    </div>
+  </div>
+
+  <div class="author-card">
+    <div class="avatar">SR</div>
+    <div class="info">
+      <h4>shanraisshan</h4>
+      <p class="role">claude-code-best-practice 仓库作者</p>
+      <p class="stats"><strong>25K+ Star</strong> · GitHub Trending 日榜 #1 · Boris Cherny 亲自审阅 · 69 条建议 11 个类别</p>
+      <p>核心主张："From vibe coding to agentic engineering - practice makes claude perfect." 整理了 Anthropic 团队实际使用的全部最佳实践，是社区最权威的 Claude Code 方法论仓库。</p>
+    </div>
+  </div>
+
+  <div class="author-card">
+    <div class="avatar">HB</div>
+    <div class="info">
+      <h4>Hunter Bown (Hmbown)</h4>
+      <p class="role">CodeWhale 创建者 · 独立开发者 · 现 Arcee AI 平台负责人</p>
+      <p class="stats">CodeWhale <strong>39.8K Star</strong> · Rust 实现 · DeepSeek V4 一级支持 · 两个音乐学位 + 半个法学学位，无 CS 背景</p>
+      <p>核心主张："模型生成，Harness 负责让生成变成行动。" 围绕 DeepSeek 的 prefix cache 机制设计 Agent loop，面向长上下文、子 Agent 协作和成本追踪。开源、低成本、可嵌入。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SECTION 2: VIBE VS AGENT ======= -->
+<section id="vibe-vs-agent">
+  <h2>二、核心认知：Vibe Coding vs Agent Engineering</h2>
+
+  <p>shanraisshan/claude-code-best-practice（Boris Cherny 审阅）定义了 AI 编程的两种范式。绝大多数人停在左边——这才是差距所在。</p>
+
+  <table>
+    <tr>
+      <th style="width:25%">维度</th>
+      <th style="width:37%">Vibe Coding（跟风编程）</th>
+      <th style="width:38%">Agent Engineering（Agent 工程）</th>
+    </tr>
+    <tr>
+      <td><strong>约束来源</strong></td>
+      <td>你每天写的提示词</td>
+      <td>配置文件 + 权限限制</td>
+    </tr>
+    <tr>
+      <td><strong>工作方式</strong></td>
+      <td>描述 → 尝试 → 纠正 → 重复</td>
+      <td>预设规则 → 自动执行 → 自动验证</td>
+    </tr>
+    <tr>
+      <td><strong>上下文管理</strong></td>
+      <td>手动 /compact</td>
+      <td><code>context: fork</code> 自动清理</td>
+    </tr>
+    <tr>
+      <td><strong>权限控制</strong></td>
+      <td>每次手动批准</td>
+      <td>Agent 物理上无权做某些操作</td>
+    </tr>
+    <tr>
+      <td><strong>可复用性</strong></td>
+      <td>每次重写提示词</td>
+      <td>Skills / Commands / Agents</td>
+    </tr>
+    <tr>
+      <td><strong>并行度</strong></td>
+      <td>一次一个对话</td>
+      <td>5-10 个 Agent 同时跑</td>
+    </tr>
+    <tr>
+      <td><strong>验证方式</strong></td>
+      <td>你肉眼检查</td>
+      <td>Stop 钩子自动验证</td>
+    </tr>
+  </table>
+
+  <blockquote>
+    <strong>Boris Cherny：</strong>"做这些事的工具——agents、skills、hooks、worktrees、loops——都是自带的。它们不是高级功能。大多数人从未发现它们。"
+  </blockquote>
+</section>
+
+<!-- ======= SECTION 3: ANTHROPIC DATA ======= -->
+<section id="anthropic-data">
+  <h2>三、硬数据：专业水平决定一切</h2>
+
+  <p>Anthropic 在 2026 年 6 月发布的官方研究报告 <em>"Agentic coding and persistent returns to expertise"</em>，分析了真实世界中 Claude Code 会话的用户专业水平与任务成功率的关系。</p>
+
+  <h3>关键发现</h3>
+
+  <table>
+    <tr>
+      <th>指标</th>
+      <th>新手</th>
+      <th>中级</th>
+      <th>专家</th>
+    </tr>
+    <tr>
+      <td>验证成功（最严格指标）</td>
+      <td><span class="data-highlight red">15%</span></td>
+      <td><span class="data-highlight orange">28%</span></td>
+      <td><span class="data-highlight green">33%</span></td>
+    </tr>
+    <tr>
+      <td>至少部分成功</td>
+      <td><span class="data-highlight orange">77%</span></td>
+      <td><span class="data-highlight green">91%</span></td>
+      <td><span class="data-highlight green">92%</span></td>
+    </tr>
+    <tr>
+      <td>遇到困难后的验证成功</td>
+      <td><span class="data-highlight red">4%</span></td>
+      <td><span class="data-highlight orange">10%</span></td>
+      <td><span class="data-highlight green">15%</span></td>
+    </tr>
+    <tr>
+      <td>放弃率（0 行代码产出）</td>
+      <td><span class="data-highlight red">19%</span></td>
+      <td><span class="data-highlight orange">6%</span></td>
+      <td><span class="data-highlight green">5%</span></td>
+    </tr>
+  </table>
+
+  <blockquote>
+    <strong>研究结论：</strong>"最大的提升来自从新手到中级——验证成功率从 15% 翻倍到 28%。在遇到困难时，专家能够翻盘的概率是新手的近 4 倍。新手更容易在遇到困难时放弃——19% 的会话以零代码产出结束，而专家只有 5-7%。"
+  </blockquote>
+
+  <p><strong>这意味着什么：</strong>不是换个更好的模型就能解决问题。AI 编程工具是"技能放大器"——你自己的工程素养和工具使用水平，直接决定了最终产出。以下所有方法论，本质上都是在帮你从"新手"迈向"专家"。</p>
+</section>
+
+<!-- ======= SECTION 4: INSTRUCTIONS ======= -->
+<section id="instructions">
+  <h2>四、项目配置：CLAUDE.md / instructions.md 的正确姿势</h2>
+
+  <h3>来自 3 个独立来源的一致结论</h3>
+
+  <p><strong>Boris Cherny（Claude Code 创建者）的核心原则：</strong></p>
+  <blockquote>"After every correction, end with: 'Update your CLAUDE.md so you don't make that mistake again.' Claude is eerily good at writing rules for itself."</blockquote>
+
+  <p>但有一个关键发现——来自 Boris Cherny 审阅的仓库：</p>
+  <blockquote>
+    <strong>"60 行是最优的，200 行是上限。</strong>超过之后，文件靠后的规则会被悄悄降权处理。Claude 的工作注意力有限，500 行的文件要求它同时记住太多约束。"
+  </blockquote>
+
+  <div class="warning">
+    <strong>反模式：</strong>大多数人把 CLAUDE.md 当配置文件用——越长越详细越好。Boris 审阅仓库作者坦言："我之前的有 500 多行——代码风格、提交格式、测试要求、变量命名、包组织结构都有。Claude 忽略了后半部分。不是每次都忽略，而是频繁到你没法依赖它。"
+  </div>
+
+  <h3>正确做法：条件规则 + 分层结构</h3>
+
+  <pre><code>my-service/
+├── CLAUDE.md            # 根：通用规则，约 30 行
+├── api/
+│   └── CLAUDE.md        # REST 约定、错误码
+├── internal/
+│   └── CLAUDE.md        # 包命名、接口模式
+└── cmd/
+    └── CLAUDE.md        # 参数解析、日志初始化</code></pre>
+
+  <p>使用条件规则——只有相关时才触发：</p>
+
+  <pre><code>&lt;important if="language=go"&gt;
+- 不要裸 goroutine，使用 errgroup 或 WaitGroup 管理生命周期
+- context 必须是第一个参数，命名为 ctx
+&lt;/important&gt;</code></pre>
+
+  <div class="tip">
+    <strong>核心技巧：</strong>"让 Claude 自己写规则"。每次 Claude 犯错后，说"把这个教训更新到 CLAUDE.md 里"。多次迭代后，CLAUDE.md 积累的都是真正踩过的坑，比你自己编的规则有效得多。
+  </div>
+</section>
+
+<!-- ======= SECTION 5: CONTEXT ======= -->
+<section id="context">
+  <h2>五、上下文管理：比你想的重要 10 倍</h2>
+
+  <blockquote>
+    <strong>Boris Cherny：</strong>"上下文是资源，像资源一样对待它。"
+  </blockquote>
+
+  <h3>坑：Skill/子 Agent 跑完不清理</h3>
+  <p>一个代码质量分析 Skill 读取了 40 个文件生成报告。跑完后，后续每个任务都带着这 40 个文件的内容。响应变慢，而且那种"不那么锐利"的感觉很难归因。</p>
+
+  <p><strong>解法：<code>context: fork</code></strong>——Skill/子 Agent 在隔离上下文中运行，完成后上下文丢弃。主 Agent 只看到干净的摘要。</p>
+
+  <h3>/clear vs /compact——别搞混</h3>
+  <table>
+    <tr><th>命令</th><th>作用</th><th>适用场景</th></tr>
+    <tr><td>/clear</td><td>清空对话，保留配置</td><td>开始新任务、切换功能模块</td></tr>
+    <tr><td>/compact</td><td>压缩历史，保留关键信息</td><td>上下文快满但需要保留讨论</td></tr>
+  </table>
+
+  <div class="tip">
+    <strong>瓜皮程序（半年实战）：</strong>"解决复杂问题时，如果 Agent 长时间无法解决，考虑新开对话让全新的 AI 状态来处理。就像一个睡醒的人工作状态更好。"
+  </div>
+
+  <h3>Codex 实测：200 万 Token 也能被浪费</h3>
+  <p>Codex 底层使用 GPT-5.5，上下文窗口 200 万 token——但如果没有 AGENTS.md，Codex 每次启动会扫描全部文件，光读文件就能消耗几十万 token，真正的推理和代码生成空间大幅压缩。</p>
+</section>
+
+<!-- ======= SECTION 6: PLAN MODE ======= -->
+<section id="plan-mode">
+  <h2>六、Plan Mode：复杂任务的方向保险</h2>
+
+  <blockquote>
+    <strong>Boris Cherny：</strong>"Pour your energy into the plan so Claude can 1-shot the implementation."
+  </blockquote>
+
+  <p>来自多位博主的共识：直接让 AI 处理复杂任务，经常做到一半才发现方向错误。</p>
+
+  <h3>正确工作流</h3>
+  <pre><code>需求模糊 → Plan Mode（只规划不动手）→ 审核计划 → Agent Mode（执行）
+需求明确 → 直接 Agent Mode</code></pre>
+
+  <h3>Anthropic 团队的高级用法</h3>
+  <ul>
+    <li>一个团队成员：<strong>用一个 Claude 写计划，再启动第二个 Claude 以 Staff Engineer 身份审查该计划</strong></li>
+    <li>另一个成员：<strong>一旦执行过程出问题，立刻切回 Plan Mode 重新评估</strong>，而不是让 Claude 继续"猜"</li>
+  </ul>
+
+  <div class="warning">
+    <strong>什么时候不该用 Plan Mode：</strong>修改一个变量名、加一行日志、修复一个已知的简单 bug——直接用 Agent Mode。Plan Mode 是方向保险，不是万能钥匙。
+  </div>
+</section>
+
+<!-- ======= SECTION 7: PERMISSIONS ======= -->
+<section id="permissions">
+  <h2>七、权限控制：从"每次点允许"到"配置级约束"</h2>
+
+  <h3>Boris Cherny 团队的做法：专用 Agent，物理限制工具权限</h3>
+
+  <pre><code># .claude/agents/reviewer.md — 代码审查专用 Agent
+tools: [Read, Glob, Grep]   # 只有读权限
+# 没有 Write、没有 Shell、没有网络</code></pre>
+
+  <blockquote>
+    "这个 Agent <strong>物理上无法修改文件</strong>。不管你在对话里要求它做什么都无所谓。提示词不再约束——是<strong>配置</strong>在约束。"
+  </blockquote>
+
+  <h3>沙盒模式：减少 84% 权限弹窗</h3>
+  <p>Claude Code 实测：<code>/sandbox</code> 下运行 shell 命令，每个命令的爆炸半径被限制，<strong>减少 84% 的权限弹窗</strong>。</p>
+
+  <h3>Hooks：在 Agent 循环之外运行</h3>
+  <p>三个大多数用户从未配置过的钩子：<code>PreToolUse</code>、<code>PostToolUse</code>、<code>Stop</code>。它们在 Claude 的主要推理循环之外执行——不消耗 token，不中断任务。</p>
+
+  <p>实际用法：</p>
+  <ul>
+    <li><strong>写入后自动格式化：</strong>PostToolUse 钩子在每次写入 Go 文件后运行 <code>gofmt</code></li>
+    <li><strong>防护式破坏性操作：</strong>拦截所有不可逆操作（文件删除、覆盖、强制推送）</li>
+  </ul>
+</section>
+
+<!-- ======= SECTION 8: VERIFICATION ======= -->
+<section id="verification">
+  <h2>八、验证机制："完成"不代表真的完成</h2>
+
+  <blockquote>
+    <strong>Boris Cherny 审阅仓库：</strong>"Claude 会告诉你任务已完成。但这不代表它真的完成了。我让 Claude 写一组 API 处理器。它说完成了。我看了代码——三个处理器中有两个的错误处理是空的。<code>err != nil</code> 后面什么都没跟。"
+  </blockquote>
+
+  <h3>解法：Stop 钩子自动验证</h3>
+  <p>任务完成后自动运行验证脚本——跑测试套件、检查预期文件是否存在、调用 API 端点并验证响应。<strong>验证失败 → 任务回滚 → Agent 继续工作直到通过。</strong></p>
+
+  <h3>验证分层模型（掘金 Harness Engineering 文章）</h3>
+  <table>
+    <tr><th>层级</th><th>时机</th><th>弱验证（不算验证）</th><th>强验证（Agent 必须调工具）</th></tr>
+    <tr><td>前置条件</td><td>执行前</td><td>"确保已安装依赖"</td><td>跑 <code>npm ls</code> 检查</td></tr>
+    <tr><td>步骤断言</td><td>每步后</td><td>"确保代码格式正确"</td><td>跑 <code>eslint --fix</code></td></tr>
+    <tr><td>终态核对</td><td>全流程后</td><td>"确保功能完整"</td><td><code>pnpm build</code> + 截图对比</td></tr>
+  </table>
+
+  <blockquote>
+    <strong>"不产生工具调用痕迹的验证不算验证。"</strong>
+  </blockquote>
+</section>
+
+<!-- ======= SECTION 9: TESTING FRAMEWORKS ======= -->
+<section id="testing-frameworks">
+  <h2>九、给 AI Agent 用的测试框架推荐（2026）</h2>
+
+  <p>验证机制要落地，最终靠的是测试框架。2026 年的测试框架分两类：<strong>传统框架里 AI 兼容性最好的</strong>，和<strong>专门为 AI Agent 设计的测试平台</strong>。</p>
+
+  <h3>第一类：传统框架的 AI 兼容性排名</h3>
+
+  <p>QASkills 2026 年对 15+ 框架做了排名，新增了关键指标——<strong>AI Agent 兼容性评分</strong>（API 是否清晰、AI 生成的测试是否可靠）。</p>
+
+  <table>
+    <tr><th>排名</th><th>框架</th><th>语言</th><th>测试层</th><th>AI 兼容性</th><th>为什么适合 AI Agent</th></tr>
+    <tr>
+      <td>🥇</td>
+      <td><strong>Playwright</strong></td>
+      <td>JS/TS/Python/Java/C#</td>
+      <td>E2E / API / 组件</td>
+      <td>⭐⭐⭐⭐⭐</td>
+      <td>显式 async/await，语义定位器（<code>getByRole</code>），AI 生成的测试最稳定</td>
+    </tr>
+    <tr>
+      <td>🥈</td>
+      <td><strong>Vitest</strong></td>
+      <td>JS/TS</td>
+      <td>单元 / 集成</td>
+      <td>⭐⭐⭐⭐⭐</td>
+      <td>Vite 原生，HMR 热重载毫秒级反馈，完美匹配 AI 的 TDD 循环</td>
+    </tr>
+    <tr>
+      <td>🥉</td>
+      <td><strong>pytest</strong></td>
+      <td>Python</td>
+      <td>单元 / 集成 / E2E</td>
+      <td>⭐⭐⭐⭐☆</td>
+      <td>fixture 系统 + parametrize 让 AI 容易生成数据驱动测试</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Cypress</strong></td>
+      <td>JS/TS</td>
+      <td>E2E</td>
+      <td>⭐⭐⭐⭐☆</td>
+      <td>交互式调试器，自动等待，但单浏览器限制</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>JUnit 5</strong></td>
+      <td>Java/Kotlin</td>
+      <td>单元 / 集成</td>
+      <td>⭐⭐⭐⭐☆</td>
+      <td>企业 Java 标准，Spring Boot 深度集成</td>
+    </tr>
+  </table>
+
+  <h3>为什么 Playwright 排第一</h3>
+  <p>AI 生成的测试代码最容易在 Playwright 上跑稳，因为它的定位器是<strong>语义化</strong>的——AI 理解"按钮叫提交"比理解 CSS 选择器容易得多：</p>
+
+  <pre><code>// ✅ Playwright — AI 很容易生成对
+await page.getByRole('button', { name: '提交' }).click();
+await expect(page.getByText('操作成功')).toBeVisible();
+
+// ❌ 传统 CSS 选择器 — AI 经常生成错的
+await page.click('#app > div > form > button:nth-child(3)');</code></pre>
+
+  <p>InfoQ 2026-05 报道：<strong>Vitest 4.1 专门加了 AI Agent 支持</strong>——实验性原生 Node.js 执行模式，跳过了 Vite 模块解析器，让 AI 生成的测试运行更快、兼容性更好。</p>
+
+  <h3>第二类：AI-Native 测试平台（专为 Agent 设计）</h3>
+
+  <p>这些不是传统框架，而是直接在 AI Agent 的循环里跑验证：</p>
+
+  <table>
+    <tr><th>平台</th><th>机制</th><th>亮点</th></tr>
+    <tr>
+      <td><strong>Shiplight AI</strong></td>
+      <td>MCP 协议接入 Coding Agent</td>
+      <td>对接 Claude Code / Cursor / Codex / 40+ Agent；AI 写代码 → 自动开真实浏览器验证 UI → 自愈失败测试 → 以 PR diff 形式提交修复。创始团队来自 Google/Airbnb/Amazon/Meta。</td>
+    </tr>
+    <tr>
+      <td><strong>QA Wolf</strong></td>
+      <td>Agent 自主浏览器探索</td>
+      <td>AI 自主浏览应用、记录交互、生成 Playwright 脚本</td>
+    </tr>
+    <tr>
+      <td><strong>testRigor</strong></td>
+      <td>自然语言描述测试</td>
+      <td>用纯英文描述测试用例，AI 负责执行，降低门槛到零</td>
+    </tr>
+    <tr>
+      <td><strong>Codium AI</strong></td>
+      <td>IDE 插件</td>
+      <td>在 IDE 内直接生成单元测试和边界用例</td>
+    </tr>
+  </table>
+
+  <h3>Shiplight 的工作流：对应"Stop 钩子自动验证"</h3>
+  <p>这正是前面验证机制章节提到的"让'完成'真正代表完成"的具体实现之一：</p>
+
+  <pre><code>你让 AI 改了一个登录页面
+  → AI 改完代码
+  → Shiplight 自动打开真实浏览器
+  → 执行"用户输入邮箱密码 → 点击登录 → 看到欢迎页"
+  → 通过 → AI 继续
+  → 失败 → 把截图和 DOM 快照返回给 AI，AI 修复后重试</code></pre>
+
+  <h3>按语言和场景推荐</h3>
+  <table>
+    <tr><th>你的场景</th><th>推荐组合</th><th>理由</th></tr>
+    <tr><td>JS/TS 全栈项目</td><td><strong>Vitest</strong>（单元）+ <strong>Playwright</strong>（E2E）</td><td>前后端统一语言，AI 生成测试成本最低</td></tr>
+    <tr><td>Python 后端</td><td><strong>pytest</strong> + <strong>Playwright for Python</strong></td><td>pytest fixture 让 AI 很容易写可复用的测试</td></tr>
+    <tr><td>前端重交互</td><td><strong>Playwright</strong> + <strong>Shiplight</strong>（AI-Native）</td><td>Playwright 兜底 + Shiplight 自动化验证闭环</td></tr>
+    <tr><td>纯 API 服务</td><td><strong>pytest</strong> / <strong>Vitest</strong>（看语言）</td><td>不需要浏览器，跑得快，AI 的 TDD 循环最爽</td></tr>
+    <tr><td>想一步到位</td><td><strong>Shiplight</strong>（MCP 接入）</td><td>AI 写代码时自动验证，不用自己写测试用例</td></tr>
+  </table>
+
+  <div class="tip">
+    <strong>落地建议：</strong>轻量级用 PostToolUse 钩子跑 <code>vitest run</code> / <code>pytest</code>；重量级用 Shiplight MCP 做真实浏览器验证。Boris Cherny 团队内部就是这套——Agent 写完代码 → 钩子跑测试套件 → 失败则 Agent 修复 → 通过则合并。
+  </div>
+</section>
+
+<!-- ======= SECTION 10: PARALLEL ======= -->
+<section id="parallel">
+  <h2>十、并行化：从"一次等一个"到"同时跑十几个"</h2>
+
+  <blockquote>
+    <strong>Boris Cherny：</strong>"随时随地运行几十个 Claude。不是夸张。"
+  </blockquote>
+
+  <h3>Git Worktree 并行架构</h3>
+  <pre><code>git worktree add .claude/worktrees/auth-refactor origin/main
+git worktree add .claude/worktrees/db-fix origin/main
+git worktree add .claude/worktrees/tests origin/main
+
+# 三个终端各启动一个 Agent
+cd .claude/worktrees/auth-refactor && codewhale
+cd .claude/worktrees/db-fix && codewhale
+cd .claude/worktrees/tests && codewhale</code></pre>
+
+  <p>Agent A 在重构 auth 模块。Agent B 在修复数据库层。Agent C 在给两者写测试。<strong>没有实例共享上下文，没有实例冲突。</strong>变更在准备合并前都在独立分支上。</p>
+
+  <h3>循环自动化（/loop）</h3>
+  <p><code>/loop 30m /code-review</code> 每 30 分钟运行一次代码审查。Boris 团队有人在周五下午让循环跑过周末——周一早上，不在时的问题已被标记。</p>
+
+  <div class="tip">
+    <strong>VentureBeat 报道：</strong>"从一次等一个 Claude 回复，到同时运行十几个——这个转变很可能是跟风编程和 Agent 工程之间最显著的差异。"
+  </div>
+</section>
+
+<!-- ======= SECTION 10: GIT ======= -->
+<section id="git">
+  <h2>十一、Git 工作流：让 Agent 管理提交</h2>
+
+  <p>瓜皮程序（管理几十个项目）的标准流程：告诉 Agent「帮我把这个项目提交到 GitHub」→ Agent 自动查看 git status/diff → 参考 commit 历史 → 生成规范 message → 执行完整 add/commit/push。</p>
+
+  <blockquote>
+    "Commit message 规范详细，能够准确总结改动内容，远比手动编写的 'fix bug' 'update' 更有价值。"
+  </blockquote>
+
+  <p>在 CLAUDE.md 中加一行即可：<code>Commit message 用中文，参考项目历史 commit 风格</code></p>
+
+  <h3>Matt Pocock 的 Git Guardrails</h3>
+  <p>他的 <code>git-guardrails</code> Skill 设置了 Claude Code hooks，在执行前拦截危险 Git 命令——<code>push</code>、<code>reset --hard</code>、<code>clean</code> 等。这是 Agent Engineering 的典型范例：不是在出事后修复，而是在出事前阻止。</p>
+</section>
+
+<!-- ======= SECTION 12: SKILLS ======= -->
+<section id="skills-guide">
+  <h2>十二、Skill 到底要不要用？实测数据与决策框架</h2>
+
+  <h3>工程师实测：85% 社区 Skill 是垃圾</h3>
+  <p>BSWEN（2026-03）实测 47 个 Claude Code Skills，<strong>只有 7 个值得安装</strong>。值得装的：<code>frontend-design</code>（27.7 万安装量）、<code>simplify</code>、<code>browser-use</code>、<code>shannon</code>（安全检查）、<code>TDD skill</code>。其余 40 个被判定为无效。</p>
+
+  <p><strong>核心结论：Custom skills（自己写的）远优于 marketplace skills（社区现成的）。</strong></p>
+
+  <h3>Matt Pocock 的 21 个 Skill 为什么 60K Star</h3>
+  <p>不是因为内容多高深，而是因为他展示了 <strong>"怎么写"</strong>。社区博主总结：</p>
+  <blockquote>
+    "不要直接照抄他的 Skills——把它当模板，写你自己的。真正有价值的不是 'Matt Pocock 写了哪些 skill'，而是他展示了一个方向：AI 时代，团队最重要的资产之一是工程规范的 Skill 化。"
+  </blockquote>
+
+  <h3>Skill 最值钱的部分：Gotchas（踩坑记录）</h3>
+  <blockquote>
+    <strong>shanraisshan 仓库：</strong>"任何 Skill 中信号最强的部分是 Gotchas。不是概述，不是使用示例，是踩坑记录。每次 Claude 失败就更新。先写 Gotchas 部分。"
+  </blockquote>
+
+  <h3>什么时候写 Skill？决策框架</h3>
+  <p><strong>应该写的信号：</strong></p>
+  <ul>
+    <li>同一模式的任务在不同对话中反复做了 3 次以上</li>
+    <li>Agent 在某个特定场景下反复踩同一个坑</li>
+    <li>项目有明确的编码规范但 Agent 不遵守</li>
+    <li>某类任务的步骤可以标准化</li>
+  </ul>
+  <p><strong>不该写的信号：</strong></p>
+  <ul>
+    <li>项目还处于探索期，需求频繁变动</li>
+    <li>团队只有你一个人用——投入产出比不高</li>
+    <li>只是想"试试看"——先用 instructions.md 跑一个月</li>
+  </ul>
+
+  <h3>Boris Cherny 的 Skill 使用策略</h3>
+  <p>他在团队中观察到的一个关键问题：</p>
+  <blockquote>
+    "如果你有一个个人 Skill（比如 /implement 按你的编码风格），怎么整合社区 Skill（比如 /simplify）而不冲突——冲突时谁赢？"
+  </blockquote>
+  <p>答案：<strong>不要同时用多个冲突的 Skill。Skill 应该是"地图"而非"仓库"。</strong>先在 L1（信息边界）和 L6（约束与恢复）两层做好，中间层逐步补充。</p>
+</section>
+
+<!-- ======= SECTION 13: LARGE PROJECT ======= -->
+<section id="large-project">
+  <h2>十三、大型项目特有的策略</h2>
+
+  <h3>1. 别一次性重构整个项目</h3>
+  <p>优设网 CodeWhale 25K Star 复盘文章明确说了：</p>
+  <blockquote>"它不适合接管大型复杂项目，比如在已有 SaaS 系统里加入完整权限系统、组织管理、审计日志、计费限制和多端同步。"</blockquote>
+  <p><strong>正确做法：</strong>把大任务拆成边界清楚的小任务。先让 Agent 读项目结构、定位入口文件、说明风险——<strong>建立"项目地图"后再动手。</strong></p>
+
+  <h3>2. 多工具链组合</h3>
+  <table>
+    <tr><th>工具</th><th>定位</th><th>适合</th></tr>
+    <tr><td>Claude Code</td><td>高可靠重型终端 Agent</td><td>复杂修改、测试修复、跨文件重构、Git 工作流</td></tr>
+    <tr><td>Kimi Code</td><td>高性价比中文 Agent</td><td>中文高频任务、小项目、日常开发</td></tr>
+    <tr><td>CodeWhale</td><td>超低成本终端组件</td><td>边界清楚的代码任务、个人 AI 编程工具链</td></tr>
+  </table>
+  <blockquote>"真正成熟的 AI 编程工作流，不是迷信某一个工具，而是知道哪个工具适合哪个环节。"</blockquote>
+
+  <h3>3. 从"玩具项目"到"生产级"的三个层次（掘金实战总结）</h3>
+  <table>
+    <tr><th>层级</th><th>特点</th><th>产出</th></tr>
+    <tr><td>L1 跟风编程</td><td>完全信任 AI，不 review，直接 accept</td><td>能跑但随时会崩的 Demo</td></tr>
+    <tr><td>L2 协作编程</td><td>AI 生成 + 人工 review + 约束文件指导</td><td>功能完整的个人项目</td></tr>
+    <tr><td>L3 Agent 工程</td><td>多 Agent 协作 + 自动化验证 + 规范化工作流</td><td>可维护的生产级系统</td></tr>
+  </table>
+
+  <h3>4. CodeWhale 的架构优势</h3>
+  <p>DeepWiki 分析：CodeWhale 用"嵌套宪法"系统替代了单层 system prompt。不是一段 Prompt 统治一切，而是分层的、可组合的权威系统——底层的 Agent 自我模型 + 模式层 + 项目本地指令 + 用户当前指令。这使得在大型项目中，指令冲突能被"最近原则"解决，而不是让 Agent 猜。</p>
+</section>
+
+<!-- ======= SECTION 14: COST ======= -->
+<section id="cost">
+  <h2>十四、Token 成本管理</h2>
+
+  <h3>DeepSeek V4 的成本优势</h3>
+  <p>独立开发者实测：同样任务量，账单从二十多美元降到两块多。CodeWhale 围绕 DeepSeek 的 <strong>prefix cache</strong> 机制设计 Agent loop——让上下文尽量保持稳定，提升缓存命中率。</p>
+
+  <h3>Codex 的实测教训</h3>
+  <p>200 万 token 上下文窗口看似很大，但 Codex 每次启动扫描全部项目文件就能消耗几十万 token——没有 AGENTS.md 的话，真正的推理空间被大幅压缩。</p>
+
+  <h3>管理策略</h3>
+  <ul>
+    <li><strong>auto_compact 开启</strong>——防止上下文越聊越大</li>
+    <li><strong>复杂任务拆段</strong>——每段 /clear 后重新开始</li>
+    <li><strong>别在同一个 session 里混不相关的任务</strong></li>
+    <li><strong>模型路由分层</strong>——简单任务用小模型（flash），复杂任务用 pro</li>
+    <li><strong>RAG 缓存</strong>——高频查询的代码库分析结果缓存复用</li>
+  </ul>
+</section>
+
+<!-- ======= SECTION 15: ANTI-PATTERNS ======= -->
+<section id="anti-patterns">
+  <h2>十五、最高频踩坑与反模式清单</h2>
+
+  <table>
+    <tr><th>#</th><th>反模式</th><th>后果</th><th>正确做法</th><th>来源</th></tr>
+    <tr>
+      <td>1</td>
+      <td>CLAUDE.md 写 500+ 行</td>
+      <td>后半部分被悄悄降权</td>
+      <td>≤60 行根文件 + 子目录条件规则</td>
+      <td>Boris Cherny 审阅仓库</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>AI 生成的 SEO 元数据不检查</td>
+      <td>8000 UV → 0，一夜归零</td>
+      <td>部署前 Chrome DevTools → head 标签确认</td>
+      <td>瓜皮程序</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Ctrl+C 终止失控 Agent</td>
+      <td>Agent 直接退出，丢失会话</td>
+      <td>按 Escape 停止执行</td>
+      <td>瓜皮程序</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>/compact 后继续提新需求</td>
+      <td>上下文污染，响应变慢</td>
+      <td>用 /clear 开始全新任务</td>
+      <td>瓜皮程序</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>让 Agent "自由发挥"修改多文件</td>
+      <td>意外修改、破坏性变更</td>
+      <td>始终看 diff，用 git worktree 隔离</td>
+      <td>Boris Cherny</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>验证靠"我感觉做完了"</td>
+      <td>err != nil 后面没处理</td>
+      <td>Stop 钩子自动验证，必须有工具调用痕迹</td>
+      <td>Boris Cherny 审阅仓库</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>把 10 个社区 Skill 全装上</td>
+      <td>上下文窗口被污染，冲突</td>
+      <td>最多 3-5 个，优先自己写</td>
+      <td>BSWEN 实测</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>在非 Git 保护目录下调 YOLO 模式</td>
+      <td>误删文件，无法恢复</td>
+      <td>始终在有 Git 的目录下运行</td>
+      <td>CodeWhale 文档</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>所有任务用 ultrathink / pro 模型</td>
+      <td>Token 账单飙升</td>
+      <td>简单任务用 flash，复杂任务用 pro</td>
+      <td>Boris Cherny</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>直接操作生产环境</td>
+      <td>安全事故</td>
+      <td>Agent 只对开发环境操作，生产用脚本</td>
+      <td>优设网 + 多位博主</td>
+    </tr>
+  </table>
+
+  <h3>更多反模式（来自 Harness Engineering 最佳实践）</h3>
+  <ul>
+    <li><strong>全能 Skill：</strong>一个 Skill 涵盖前端+后端+测试——拆分为多个专业 Skill</li>
+    <li><strong>硬编码凭证：</strong>API Key 写在 Skill 里——用环境变量 <code>{env:TOKEN}</code></li>
+    <li><strong>过度权限：</strong>文档编写 Skill 给了 RunCommand 权限——最小权限原则</li>
+    <li><strong>捆绑大型资源：</strong>100MB 数据库塞进 Skill 目录——外部链接引用</li>
+  </ul>
+</section>
+
+<!-- ======= SECTION 16: ROADMAP ======= -->
+<section id="roadmap">
+  <h2>十六、渐进式路线图</h2>
+
+  <div class="roadmap">
+    <div class="roadmap-item">
+      <h4>第一周：打地基</h4>
+      <p>写 CLAUDE.md / instructions.md（≤60 行）。至少包含：技术栈、目录结构约定、测试命令、禁止修改的文件、编码规范。不开 YOLO 模式。始终看 diff。</p>
+    </div>
+    <div class="roadmap-item">
+      <h4>第二周：养成习惯</h4>
+      <p>复杂任务先用 Plan Mode 规划，审核通过后再用 Agent Mode 执行。养成"先建立项目地图再动手"的肌肉记忆。</p>
+    </div>
+    <div class="roadmap-item">
+      <h4>第三周：建立反馈</h4>
+      <p>每次 Agent 翻车后记录到 Gotchas 文档。让 Agent 自己写"下次不要犯这个错"的规则，更新到 CLAUDE.md 里。</p>
+    </div>
+    <div class="roadmap-item">
+      <h4>第四周：固化第一个流程</h4>
+      <p>把最高频的重复任务固化为 Skill 或 Slash Command。从一个开始——别贪多。</p>
+    </div>
+    <div class="roadmap-item">
+      <h4>第二个月：引入工程化</h4>
+      <p>学习 git worktree 并行。尝试用一个 Agent 写、另一个 Agent 审查。配置 PostToolUse 钩子做自动格式化。配置 Stop 钩子做验证。</p>
+    </div>
+    <div class="roadmap-item">
+      <h4>第三个月：自动化</h4>
+      <p>尝试 /loop 自动审查。尝试多 Agent 协作完成一个完整功能。建立模型路由：简单任务用 flash/fast，复杂任务用 pro。</p>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>Boris Cherny 的忠告：</strong>"不需要一口气做完所有事。从两个 Agent 开始——一个实现、一个审查。然后你自然会想加第三个。"
+  </blockquote>
+</section>
+
+<!-- ======= SECTION 17: SOURCES ======= -->
+<section id="sources">
+  <h2>十七、信息来源与参考文献</h2>
+
+  <h3>高 Star 项目 & 核心作者</h3>
+  <table>
+    <tr><th>来源</th><th>作者/组织</th><th>Star / 影响力</th><th>内容</th></tr>
+    <tr>
+      <td><a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank">claude-code-best-practice</a></td>
+      <td>shanraisshan</td>
+      <td>25K+ Star · GitHub Trending #1</td>
+      <td>69 条建议 11 类别 · Boris Cherny 亲自审阅</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/mattpocock/skills" target="_blank">mattpocock/skills</a></td>
+      <td>Matt Pocock</td>
+      <td>60K+ Star</td>
+      <td>21 个工程级 Skill · "Not vibe coding"</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Hmbown/CodeWhale" target="_blank">CodeWhale</a></td>
+      <td>Hunter Bown</td>
+      <td>39.8K Star</td>
+      <td>DeepSeek V4 终端 Agent · 嵌套宪法架构</td>
+    </tr>
+    <tr>
+      <td><a href="https://code.claude.com/docs/en/best-practices" target="_blank">Claude Code 官方最佳实践</a></td>
+      <td>Anthropic</td>
+      <td>官方文档</td>
+      <td>Anthropic 内部团队验证的模式</td>
+    </tr>
+  </table>
+
+  <h3>Anthropic 官方研究</h3>
+  <table>
+    <tr><th>来源</th><th>关键数据</th></tr>
+    <tr>
+      <td><a href="https://www.anthropic.com/research/claude-code-expertise" target="_blank">Agentic coding and persistent returns to expertise</a>（2026-06）</td>
+      <td>专家成功率 33% vs 新手 15% · 遇到困难后专家翻盘率 15% vs 新手 4%</td>
+    </tr>
+    <tr>
+      <td><a href="https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start" target="_blank">How Claude Code works in large codebases</a>（Anthropic 官方博客）</td>
+      <td>大型代码库部署的公认模式：配置、工具、组织结构</td>
+    </tr>
+  </table>
+
+  <h3>社区实测 & 实战文章</h3>
+  <table>
+    <tr><th>来源</th><th>核心内容</th></tr>
+    <tr><td><a href="https://cc.guapihub.net/blog/practice/claude-code-10-tips/" target="_blank">用了半年 Claude Code，我总结了 10 条血泪教训</a>（2026-01）</td><td>CLAUDE.md、/clear vs /compact、SEO 归零事故、Agent Skills</td></tr>
+    <tr><td><a href="https://www.wangjun.dev/2026/05/claude-code-best-practices/" target="_blank">Claude Code 12 大最佳实践</a>（2026-05）</td><td>Boris Cherny 审阅仓库精华提炼 · 条件规则 · 并行 Agent</td></tr>
+    <tr><td><a href="https://docs.bswen.com/blog/2026-03-28-claude-skills-worth-installing/" target="_blank">The Claude Code Skills Actually Worth Installing</a>（2026-03）</td><td>工程师实测 47 个 Skill · 仅 7 个值得装</td></tr>
+    <tr><td><a href="https://juejin.cn/post/7662205497018531892" target="_blank">Skill 在项目中的实践——从 Agent 困境到 Skill 工程化</a>（2026-07）</td><td>Harness 六层架构 · 五步法 · lifecycle 编排器案例</td></tr>
+    <tr><td><a href="https://www.aitooldiscovery.com/guides/claude-code-reddit" target="_blank">Claude Code Reddit: What Developers Actually Use It For</a>（2026-07）</td><td>r/ClaudeCode 4200+ 周活用户讨论汇总</td></tr>
+    <tr><td><a href="https://www.uisdc.com/deepseek-codewhale" target="_blank">Github拿下25K Star！CodeWhale凭什么火了</a>（2026-06）</td><td>CodeWhale 生态位分析 · 适用场景和边界</td></tr>
+    <tr><td><a href="https://tonydeng.github.io/harness-engineering-from-oc-to-ai-coding/05-skills/skill-best-practices.html" target="_blank">Skill 最佳实践 - Harness Engineering</a>（2026-07）</td><td>6 条核心原则 · 12 种反模式 · 8 步调试清单</td></tr>
+  </table>
+
+  <h3>Boris Cherny 相关汇总</h3>
+  <ul>
+    <li><a href="https://howborisusesclaudecode.com/" target="_blank">Boris Cherny's Claude Code Tips — 118+ Tips</a></li>
+    <li><a href="https://skzl-ai.github.io/boris-cherny-claude-code-playbook/" target="_blank">Boris Cherny · Claude Code Playbook — 146 Tips</a></li>
+    <li><a href="https://www.jitendrazaa.com/blog/others/tips/10-claude-code-tips-from-the-creator-boris-cherny-february/" target="_blank">10 Claude Code Tips from the Creator Boris Cherny</a>（850 万浏览量的 X 线程详解）</li>
+    <li><a href="https://newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny" target="_blank">The Pragmatic Engineer Podcast — Building Claude Code with Boris Cherny</a></li>
+  </ul>
+
+  <h3>关于 CodeWhale 与 Skill 的更多资料</h3>
+  <ul>
+    <li><a href="https://deepwiki.com/Hmbown/CodeWhale/5-extension-systems" target="_blank">CodeWhale Extension Systems (DeepWiki)</a> — Sub-Agents, RLM & Skills</li>
+    <li><a href="https://github.com/XDongiang/codewhale-custom" target="_blank">codewhale-custom</a> — 基于 CodeWhale 的 Skill 和工作流平台</li>
+    <li><a href="https://github.com/eru123/codewhale-superpowers" target="_blank">codewhale-superpowers</a> — TDD 护栏、系统调试、证据驱动完成</li>
+  </ul>
+</section>
+
+<!-- ======= FOOTER ======= -->
+<footer>
+  <p>本文档基于 2026 年 7 月对 30+ 社区来源的系统梳理，覆盖 GitHub Trending #1 仓库、Claude Code 创建者、TypeScript 教育领域顶级作者、CodeWhale 创建者及 Anthropic 官方研究。</p>
+  <p>方法论本身会持续演进——本文档建议每 3 个月重新审视一次。所有引用链接截至 2026-07-15 有效。</p>
+  <p style="margin-top:12px;">Made with research by CodeWhale + DeepSeek V4 Pro · <a href="https://github.com/Hmbown/CodeWhale" target="_blank">CodeWhale on GitHub</a></p>
+</footer>
+
+</div>
+</body>
+</html>

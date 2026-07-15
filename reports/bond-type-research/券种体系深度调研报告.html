@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>算力券 · Token券 · 场景券 —— 券种体系深度调研报告</title>
+<style>
+  :root{
+    --c-bg:#f8f9fb; --c-card:#fff; --c-text:#1e293b; --c-muted:#64748b;
+    --blue-50:#eff6ff; --blue-100:#dbeafe; --blue-200:#bfdbfe; --blue-600:#2563eb; --blue-700:#1d4ed8; --blue-800:#1e40af; --blue-900:#1e3a8a;
+    --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb; --gray-400:#9ca3af; --gray-500:#6b7280; --gray-800:#1f2937;
+    --green-50:#f0fdf4; --green-600:#16a34a; --green-700:#15803d;
+    --amber-50:#fffbeb; --amber-600:#d97706; --amber-700:#b45309;
+    --red-50:#fef2f2; --red-600:#dc2626; --red-700:#b91c1c;
+    --radius:8px; --nav-w:210px;
+    --fs-body:16px; --fs-h1:1.65em; --fs-h2:1.25em; --fs-h3:1.08em; --fs-h4:.98em; --fs-small:.88em; --fs-xs:.8em;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:28px}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",-apple-system,sans-serif;
+    background:var(--c-bg); color:var(--c-text); line-height:1.82; font-size:var(--fs-body);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar{
+    position:fixed; left:0; top:0; width:var(--nav-w); height:100vh;
+    background:#fff; border-right:1px solid var(--gray-200);
+    padding:28px 0 20px; overflow-y:auto; z-index:100;
+    box-shadow:1px 0 8px rgba(0,0,0,.03);
+  }
+  .sidebar .logo{
+    font-size:1em; font-weight:700; color:var(--blue-800); padding:0 20px 16px;
+    border-bottom:1px solid var(--gray-200); margin-bottom:12px;
+    letter-spacing:.02em;
+  }
+  .sidebar nav a{
+    display:block; padding:8px 20px; color:var(--gray-500); text-decoration:none;
+    font-size:var(--fs-small); border-left:3px solid transparent;
+    transition:all .15s; line-height:1.5;
+  }
+  .sidebar nav a:hover{color:var(--blue-700);background:var(--blue-50);border-left-color:var(--blue-200)}
+  .sidebar nav a.active{color:var(--blue-700);font-weight:600;background:var(--blue-50);border-left-color:var(--blue-600)}
+
+  /* ── Main ── */
+  .main{margin-left:var(--nav-w);max-width:880px;padding:0 36px 64px}
+
+  .topbar{background:var(--blue-900);color:#fff;padding:36px 32px 28px;margin-bottom:32px}
+  .topbar h1{font-size:var(--fs-h1);font-weight:700;letter-spacing:.03em;margin-bottom:6px}
+  .topbar .sub{font-size:1em;color:rgba(255,255,255,.7)}
+  .topbar .meta{display:flex;gap:20px;flex-wrap:wrap;font-size:var(--fs-xs);color:rgba(255,255,255,.5);margin-top:10px}
+
+  section{margin:38px 0}
+  h2{font-size:var(--fs-h2);font-weight:700;color:var(--blue-900);border-left:3px solid var(--blue-600);padding-left:14px;margin-bottom:18px}
+  h3{font-size:var(--fs-h3);font-weight:700;margin:22px 0 10px;color:var(--c-text)}
+  h4{font-size:var(--fs-h4);font-weight:700;margin:16px 0 6px;color:#374151}
+
+  .card{background:var(--c-card);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);padding:22px 28px;margin:16px 0;border:1px solid var(--gray-200)}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .card-header .title{font-size:1.08em;font-weight:700}
+
+  .tag{display:inline-block;font-size:.76em;font-weight:700;padding:2px 10px;border-radius:99px;letter-spacing:.02em}
+  .tag-red{background:var(--red-50);color:var(--red-700)} .tag-green{background:var(--green-50);color:var(--green-700)}
+  .tag-amber{background:var(--amber-50);color:var(--amber-700)} .tag-blue{background:var(--blue-50);color:var(--blue-700)}
+
+  /* ── Table ── */
+  .table-wrap{overflow-x:auto;margin:10px 0}
+  table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;font-size:var(--fs-small)}
+  thead th{
+    background:var(--blue-50);color:var(--blue-800);font-weight:700;text-align:left;
+    padding:10px 14px;white-space:nowrap;font-size:.9em;letter-spacing:.02em;
+    border-bottom:2px solid var(--blue-200);
+  }
+  thead th:first-child{border-radius:var(--radius) 0 0 0}
+  thead th:last-child{border-radius:0 var(--radius) 0 0}
+  tbody td{padding:10px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--gray-100);color:var(--c-text)}
+  tbody tr:last-child td:first-child{border-radius:0 0 0 var(--radius)}
+  tbody tr:last-child td:last-child{border-radius:0 0 var(--radius) 0}
+  tbody tr:hover td{background:#f8fafd}
+  tbody td:first-child{font-weight:500}
+
+  .verdict{margin:10px 0;padding:10px 16px;border-radius:6px;font-weight:700;font-size:.92em}
+  .verdict.red{background:var(--red-50);border-left:3px solid var(--red-600);color:var(--red-700)}
+  .verdict.green{background:var(--green-50);border-left:3px solid var(--green-600);color:var(--green-700)}
+  .verdict.amber{background:var(--amber-50);border-left:3px solid var(--amber-600);color:var(--amber-700)}
+
+  .flow{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:var(--radius);padding:16px 20px;margin:12px 0;font-size:var(--fs-small);line-height:2.1}
+  .flow b{color:var(--blue-800)}
+
+  .callout{background:#fefce8;border:1px solid #fde68a;border-radius:6px;padding:14px 18px;margin:12px 0;font-size:.92em}
+  .callout strong{color:#92400e}
+
+  blockquote{border-left:3px solid var(--blue-200);margin:10px 0;padding:8px 18px;background:var(--blue-50);border-radius:0 6px 6px 0;color:var(--blue-800);font-style:italic;font-size:.94em}
+
+  ul,ol{margin:6px 0 6px 22px} li{margin:5px 0}
+
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--gray-200);color:var(--gray-500);font-size:var(--fs-xs);text-align:center}
+  footer a{color:var(--blue-600);text-decoration:none}
+
+  /* ── Mobile ── */
+  @media(max-width:860px){
+    .sidebar{display:none}
+    .main{margin-left:0;padding:0 16px 48px}
+    .topbar{padding:28px 20px 22px}
+    .topbar h1{font-size:1.3em}
+    .card{padding:16px 14px}
+    table{font-size:.78em} th,td{padding:6px 8px}
+  }
+  @media print{
+    .sidebar{display:none}
+    .main{margin-left:0}
+    body{font-size:13px;background:#fff}
+    .topbar{background:var(--blue-900)!important;-webkit-print-color-adjust:exact}
+    .card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="logo">📋 券种体系调研报告</div>
+  <nav id="toc"></nav>
+</aside>
+
+<!-- ── Main ── -->
+<div class="main">
+
+<header class="topbar">
+  <h1>算力券 · Token券 · 场景券 —— 券种体系深度调研报告</h1>
+  <p class="sub">算力超市 · Token 工厂 · 券种体系 —— 概念拆解，横向对比，落地逻辑</p>
+  <div class="meta"><span>2026 年 6 月</span><span>基于多源政府文件与权威媒体报道交叉验证</span></div>
+</header>
+
+<!-- 引言 -->
+<section id="sec-intro">
+  <h2>引言</h2>
+  <div class="card">
+    <p>2023 年以来，伴随"东数西算"工程深化与大模型产业爆发，中国 AI 基础设施领域涌现出一系列新概念——<strong>算力超市、Token 工厂、算力券、Token 券、场景券</strong>。这些术语散见于政府文件、企业宣传与媒体报道，彼此交叉重叠，极易混淆。</p>
+    <p style="margin-top:10px">本报告基于国务院及工信部文件、15 个以上省份/城市的政策原文、运营商与云厂商的公开商业数据，对五个核心概念逐一拆解，明确区分三类性质——<strong>营销概念</strong>（企业包装的商业话语）、<strong>国家计划</strong>（有正式文件背书的政策工具）、<strong>落地应用</strong>（已上线运营或完成兑付的实际产品）。</p>
+    <p style="margin-top:10px"><strong>核心发现：</strong>算力券是最成熟的政策工具，已覆盖全国 15+ 城市/省份；Token 工厂从行业术语快速演变为百亿级产业实践；四川于 2026 年 5 月首次在省级文件中提出"词元（Token）券"；场景券正从概念走向独立财政管理——山东已发布专项资金管理办法征求意见稿。与此同时，多个概念面临商业主体借政策话语进行营销包装的风险，本报告专设一章标定边界。</p>
+  </div>
+</section>
+
+<!-- 一、五大概念 -->
+<section id="sec-concepts">
+  <h2>一、五大概念逐个拆解</h2>
+
+  <!-- 1. 算力超市 -->
+  <div class="card" id="cpt-market">
+    <div class="card-header"><span class="title">1. 算力超市</span><span class="tag tag-green">落地应用</span><span class="tag tag-red">国家政策概念</span></div>
+    <blockquote>"类似电商平台的算力交易市场，支持按'卡时''核时'及 Token 计费等灵活付费，用户可直接登录平台选择不同算力产品，像购买日用品一样完成支付并使用。" —— 工信部，2026.4.15</blockquote>
+    <p><strong>运作模式：</strong>供给侧通过"算力银行"存入闲置算力→池化调度→跨区域调配；需求侧在"算力超市"浏览→按卡时/Token计费→在线下单。核心逻辑：算力从重资产变为可交易、可计量的轻服务。工信部 2026 年 4 月首次在官方文件中提出此概念，目标到 2028 年底建成全国普惠算力服务体系。</p>
+    <h4>已落地平台</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>平台</th><th>运营方</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>上海电信「智云上海 AI STORE」</td><td>上海电信</td><td>✅ 已上线，衔接青浦/临港智算中心</td></tr>
+        <tr><td>广东电信算力超市</td><td>广东电信</td><td>✅ 集成算力+AI应用解决方案</td></tr>
+        <tr><td>杭州算力调度平台</td><td>杭州政府</td><td>✅ 在线签约、按量计费</td></tr>
+        <tr><td>算力超市8 / 胜算云 / 同橙算力超市</td><td>商业平台</td><td>✅ 聚合多元算力、GPU弹性服务</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict green">🔑 兼有国家政策概念和商业化产品双重属性。已从营销比喻升级为有工信部官方背书的基础设施方向。</div>
+  </div>
+
+  <!-- 2. Token 工厂 -->
+  <div class="card" id="cpt-tokenfactory">
+    <div class="card-header"><span class="title">2. Token 工厂体系</span><span class="tag tag-green">产业实践</span><span class="tag tag-amber">行业术语</span></div>
+    <blockquote>"Token 工厂开始从概念走向真实落地与价值兑现。""未来的数据中心不是存储文件的仓库，而是生产 Token 的工厂。" —— Nvidia CEO 黄仁勋</blockquote>
+    <h4>核心落地事件</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>事件</th><th>规模/详情</th></tr></thead>
+      <tbody>
+        <tr><td>中国电信「Token 工厂」集采</td><td><strong>174.38 亿元</strong>（含税），11 个标包</td></tr>
+        <tr><td>百度「MaaS」→「Token Factory」</td><td>2026.5.13 正式升级品牌</td></tr>
+        <tr><td>阿里 AI 产品季度外部收入</td><td>89.71 亿元（年化超 358 亿）</td></tr>
+        <tr><td>阿里百炼 MaaS 平台 ARR 目标</td><td>年底突破 300 亿元（管理层指引）</td></tr>
+        <tr><td>中国移动 Token 运营生态联盟</td><td>2026.5.8 发布，联合腾讯、阿里、华为、中兴、讯飞</td></tr>
+        <tr><td>中金测算 / 海外对标</td><td>理论毛利率 <strong>60%</strong>；海外头部厂商已达 40–50%</td></tr>
+      </tbody>
+    </table></div>
+    <p>概念本质：将 GPU 集群包装为"生产 Token"的标准化服务，商业模式从"卖算力硬件"升级为"卖 Token 产出"。核心玩家：三大运营商 + 阿里/百度/华为 + 润建股份等。</p>
+    <div class="verdict green">🔑 已从营销概念演进为真实产业形态。概念名称有营销成分，但背后有百亿级资本投入和可验证的商业收入。</div>
+  </div>
+
+  <!-- 3. 算力券 -->
+  <div class="card" id="cpt-compute">
+    <div class="card-header"><span class="title">3. 算力券</span><span class="tag tag-red">国家计划</span><span class="tag tag-green">最成熟</span></div>
+    <p>地方政府向 AI 企业发放的<strong>算力消费补贴代金券</strong>，用于抵扣指定智算中心的 GPU/NPU 算力费用。是"创新券"在 AI 领域的延伸，也是"东数西算"国家战略的核心配套。</p>
+    <h4>重点地区政策对比</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>地区</th><th>补贴比例</th><th>年度上限</th><th>特点</th></tr></thead>
+      <tbody>
+        <tr><td><strong>北京</strong></td><td>20%</td><td>200 万/企</td><td>最早推出（2023.10），有效期至 2025.12</td></tr>
+        <tr><td><strong>贵州</strong></td><td>智能 30% / 通用 5%</td><td>200 万/企</td><td>覆盖面最广（5 大类），即申即享，含实物券</td></tr>
+        <tr><td><strong>重庆</strong></td><td>20%</td><td>—</td><td>即申即发，2025.9.1 起</td></tr>
+        <tr><td><strong>天津</strong></td><td>10%</td><td>200 万/企</td><td>支持大模型训练推理、数据标注等</td></tr>
+        <tr><td><strong>武汉</strong></td><td>50%</td><td>20 万/企</td><td>补贴比例最高，服务券总额 ≥1000 万/年</td></tr>
+        <tr><td><strong>庆阳</strong></td><td>—</td><td><strong>1 亿元</strong>/年总额</td><td>面向全国，依托"东数西算"枢纽</td></tr>
+        <tr><td><strong>成都</strong></td><td>—</td><td>1000 万/年总额</td><td>以算力券为核心的统筹结算分担机制</td></tr>
+        <tr><td><strong>湖南</strong></td><td>30%</td><td>1000 万/企/年</td><td>2026 年 5 月发布实施细则，每年集中评审发放</td></tr>
+        <tr><td><strong>浙江</strong></td><td>—</td><td>—</td><td>使用超长期特别国债资金</td></tr>
+        <tr><td><strong>扬州</strong></td><td>—</td><td>—</td><td>面向数字经济头部企业</td></tr>
+        <tr><td><strong>廊坊</strong></td><td>—</td><td>—</td><td>京津冀协同，2024.5 发布</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:6px">另有深圳、上海、青岛、苏州、南京、合肥已实施。杭州萧山"五券"体系（场景/数改/算力/语料/模型）年总额 2.4 亿元，其中算力券单列 1 亿元。以上均经 gov.cn 或官方来源验证。</p>
+    <div class="verdict red">🔑 最成熟的政策工具，覆盖至少 15+ 城市/省份。贵州方案最具系统性，浙江率先使用超长期特别国债资金。</div>
+  </div>
+
+  <!-- 4. Token 券 -->
+  <div class="card" id="cpt-tokenv">
+    <div class="card-header"><span class="title">4. Token 券（词元券）</span><span class="tag tag-red">进入官方政策</span><span class="tag tag-amber">早期阶段</span></div>
+    <blockquote>"修订省促进人工智能产业链发展若干政策，扩容'算力券'、<strong>启动'词元（Token）券'</strong>" —— 四川省人民政府办公厅，川办发〔2026〕14号，2026.5.5</blockquote>
+    <p>这是<strong>首次在省级政府正式文件中出现 Token 券提法</strong>（四川采用"词元券"中文命名），标志着 Token 券从商业营销概念进入官方政策工具范畴。目前仍处于"启动"阶段，具体实施细则尚未公布。</p>
+    <p>此外，贵州算力券已覆盖"模型服务"（30% 补贴，上限 200 万/年），功能上与 Token 券高度重叠。商业层面，中国移动北京公司已推出"算力 Token 套餐"，以 Token 计费、按需付费。</p>
+    <div class="callout">
+      <strong>⚠️ 核心区分：商业促销 vs 政府补贴</strong>
+      <div class="table-wrap"><table style="margin-top:6px">
+        <thead><tr><th>维度</th><th>商业"Token 券"</th><th>政府"词元（Token）券"</th></tr></thead>
+        <tbody>
+          <tr><td><strong>来源</strong></td><td>云厂商（阿里、百度、讯飞等）促销活动</td><td>四川川办发〔2026〕14号正式提出</td></tr>
+          <tr><td><strong>性质</strong></td><td>企业营销行为，预付费套餐的"代金券"包装</td><td>财政补贴工具（细则未出，已入政府公文）</td></tr>
+          <tr><td><strong>资金</strong></td><td>企业营销预算</td><td>财政资金（预计走产业链专项资金）</td></tr>
+          <tr><td><strong>渠道</strong></td><td>云厂商官网 / 控制台</td><td>待公布（预计类似算力券的政府平台模式）</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:6px">📌 <strong>实用判断标准：</strong>看发放主体是云厂商还是政府，看申领渠道是企业官网还是政府平台。云厂商的"Token 券"本质是打折促销。目前仅四川在政府公文中提出"词元券"，但兑付通道尚未建立——任何声称"响应国家政策发放 Token 券"的商业行为当前均为借势营销。</p>
+    </div>
+    <div class="verdict amber">🔑 Token 券正从商业概念进入政策视野。需严格区分云厂商的商业促销与政府的财政补贴。</div>
+  </div>
+
+  <!-- 5. 场景券 -->
+  <div class="card" id="cpt-scene">
+    <div class="card-header"><span class="title">5. 场景券</span><span class="tag tag-red">国家计划</span><span class="tag tag-amber">部分省试点</span></div>
+    <p>场景券是<strong>真实存在的政策工具</strong>，多份省级文件明确提及，且正快速走向独立财政管理。</p>
+    <h4>政策文件证据链</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>文件</th><th>核心原文</th><th>时间</th></tr></thead>
+      <tbody>
+        <tr><td><strong>四川川办发〔2026〕7号</strong></td><td>"扩容省级'算力券'，<strong>探索制定'场景券''模型券'政策</strong>"</td><td>2026.2</td></tr>
+        <tr><td><strong>山东工信厅</strong></td><td>《省级智能<strong>"场景券"</strong>奖补资金管理办法及实施细则》征求意见稿</td><td>2026.6.10</td></tr>
+        <tr><td>山东财政厅</td><td>"未来三年引导超 <strong>100 亿元</strong>财政资金，创新实施'模型券''场景券'奖补"</td><td>2026.5.21</td></tr>
+        <tr><td>杭州萧山区</td><td>"五券"年总额<strong>2.4 亿元</strong>，含场景券/数改券/算力券/语料券/模型券</td><td>2025.9</td></tr>
+      </tbody>
+    </table></div>
+    <h4>概念溯源：从"场景培育"到"场景券化"</h4>
+    <div class="callout">
+      <p><strong>国务院层面（2025.11）：</strong>国办发〔2025〕37号将场景定义为<em>"用于系统性验证新技术、新产品、新业态产业化应用的具体情境"</em>，政策工具为政府采购、基建投资、首台套支持——本质是供给侧开放资源，政府作为场景提供方。<strong>全文无"券"字，无直接发钱机制。</strong></p>
+      <p style="margin-top:8px"><strong>地方层面（2026.2 起）：</strong>四川率先"探索制定"，山东更进一步——2026.5.21 宣布百亿计划，6.10 即发布独立资金管理办法征求意见稿，表明场景券正获得<strong>独立财政科目</strong>。</p>
+      <p style="margin-top:8px"><strong>核心张力：</strong>国务院的"场景"是开放资源；地方的"场景券"是发放补贴。算力券有清晰的"合同→发票→兑付"闭环。场景券的财政路径更可能走政府采购通道或项目制补贴，而非独立的"发券-核销"体系。</p>
+    </div>
+    <div class="verdict red">🔑 场景券真实存在且正快速制度化。与算力券的"消费品补贴"逻辑不同，它更接近"项目制/采购制"逻辑。</div>
+  </div>
+</section>
+
+<!-- 二、横向对比 -->
+<section id="sec-compare">
+  <h2>二、横向对比总表</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>维度</th><th>算力超市</th><th>Token 工厂</th><th>算力券</th><th>Token 券</th><th>场景券</th></tr></thead>
+    <tbody>
+      <tr><td><strong>性质</strong></td><td>国家政策+商业产品</td><td>产业实践+行业术语</td><td>政府政策工具</td><td>商业→进入政策</td><td>政府政策工具</td></tr>
+      <tr><td><strong>官方文件</strong></td><td>✅ 工信部 2026.4</td><td>—</td><td>✅ 15+ 省/市</td><td>✅ 川办发〔2026〕14号</td><td>✅ 川/鲁/杭/工信部</td></tr>
+      <tr><td><strong>落地程度</strong></td><td>✅ 多地已上线</td><td>✅ 174亿集采+ARR 358亿</td><td>✅ 多轮兑付</td><td>🟡 启动阶段</td><td>🟡 山东/四川试点</td></tr>
+      <tr><td><strong>财政闭环</strong></td><td>市场化定价</td><td>商业化运营</td><td>✅ 合同→发票→兑付</td><td>❓ 待定</td><td>⚠️ 采购制/项目制</td></tr>
+      <tr><td><strong>国家计划关联</strong></td><td>🟡 间接</td><td>无</td><td>🔴 强</td><td>🔴 新兴</td><td>🔴 强</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 三、分类判定 -->
+<section id="sec-verdict">
+  <h2>三、最终分类判定</h2>
+  <div class="flow">
+    <b>🔴 国家计划 / 政策工具</b><br>
+    ├── <b>算力券</b> ✅✅ 15+ 省实施，东数西算配套，最成熟<br>
+    ├── <b>场景券</b> ✅ 四川 / 山东 / 杭州，2026 年快速制度化<br>
+    ├── <b>模型券</b> ✅ 山东 / 四川 / 杭州 / 工信部<br>
+    ├── <b>Token 券 / 词元券</b> ✅ 四川率先提出（川办发〔2026〕14号）<br>
+    ├── <b>语料券</b> ✅ 山东 / 杭州<br>
+    └── <b>算力超市</b> ✅ 工信部 2026.4 列入普惠算力专项行动<br><br>
+    <b>🟢 落地应用 / 产业实践</b><br>
+    ├── <b>算力超市</b> — 上海 / 广东 / 杭州已上线运营<br>
+    ├── <b>Token 工厂</b> — 电信 174 亿集采、百度 Token Factory、阿里 ARR 358 亿<br>
+    └── <b>算力券</b> — 北京 / 贵州 / 浙江 / 重庆已完成多轮兑付<br><br>
+    <b>🟡 营销概念 / 品牌包装</b><br>
+    └── <b>Token 工厂</b> — 名称有营销成分，但产业已在真实运转
+  </div>
+</section>
+
+<!-- 四、边界警示 -->
+<section id="sec-warn">
+  <h2>四、⚠️ 商业营销与政府政策的边界警示</h2>
+  <p style="margin-bottom:14px">多个概念存在<strong>商业主体借政府政策话语进行营销包装</strong>的现象，以下逐一标定边界。</p>
+
+  <div class="card">
+    <div class="card-header"><span class="title">🔴 高风险混淆区</span></div>
+    <h4>Token 券 / 词元券 —— 最易混淆</h4>
+    <p>云厂商的"Token 券"（2024–2025 年已常见）是预付费套餐的促销包装。政府的"词元券"（四川 2026.5 首次提出）是财政补贴工具，目前尚无兑付通道。识别方法：看发放方是否为云厂商、是否需要充值/消费后才"送"、是否通过政府平台申领。⚠️ 任何声称可"代申领政府 Token 券"的当前均为虚假宣传。</p>
+    <h4>算力超市 —— 概念借用</h4>
+    <p>工信部 2026 年 4 月才正式提出此概念。此前市场上已存在的商业"算力超市"平台是独立商业行为，与政府普惠算力体系无隶属关系。判断标准：是否接入地方政府算力调度平台？是否支持算力券兑付？</p>
+    <h4>Token 工厂 —— 无政府背书</h4>
+    <p>此概念从未在任何政府文件中出现。运营商（电信/移动/联通）的 Token 工厂集采是<strong>企业商业行为</strong>，使用企业自有资金，非财政拨款。部分媒体或券商将其包装为"国家战略"属于过度解读。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="title">🟡 中度混淆区</span></div>
+    <h4>场景券 —— 政策概念被泛化</h4>
+    <p>国务院只提"场景培育"（无"券"字）。地方"场景券"是自行"券化"的产物。参与政府"场景培育"项目 ≠ 获得了"场景券"。目前仅山东（征求意见稿）、四川（探索）、杭州萧山（已发布）有明确动作。</p>
+    <h4>模型券 —— 与算力券易混淆</h4>
+    <p>算力券补"买算力"，模型券补"买模型"。但贵州已将"模型服务"纳入算力券覆盖范围（30%），在贵州二者实际合一。其他省份分列，申领时需注意避免重复申报。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="title">🟢 清晰区</span></div>
+    <ul>
+      <li><strong>算力券</strong>：最透明。申领渠道均为政府平台（.gov.cn），有合同→发票→兑付闭环。注意：须本地注册、须使用指定智算中心、须未获其他同类补贴。</li>
+      <li><strong>语料券 / 存力券 / 运力券</strong>：目前仅有政策宣示，尚无大规模落地，暂未见商业借势营销。</li>
+    </ul>
+  </div>
+
+  <div class="verdict red" style="margin-top:10px">🔑 三要素判断法：① 发放主体是否为政府部门 → ② 申领渠道是否为政府平台（.gov.cn）→ ③ 是否需要财政票据（发票+支付凭证）。缺一即非政府补贴。</div>
+</section>
+
+<!-- 五、券种全景图 -->
+<section id="sec-map">
+  <h2>五、"券"种全景图</h2>
+  <div class="flow">
+    <b>政府补贴型（财政出资）</b><br>
+    ├── <b>算力券</b>（15+ 省，2023–）—— 智能 30% / 通用 5% / 超级 5%<br>
+    ├── <b>场景券</b>（川/鲁/杭，2026–）—— 智能制造 / 数字政务 / AI 应用<br>
+    ├── <b>模型券</b>（鲁/川/杭/工信部，2026–）—— 垂直大模型 / 微调<br>
+    ├── <b>词元（Token）券</b>（川，2026.5–）—— 四川率先启动<br>
+    ├── <b>语料券</b>（鲁/杭，2026–）—— 训练数据集 / 语料库<br>
+    ├── <b>存力券</b>（工信部提及）<br>
+    └── <b>运力券</b>（工信部提及）<br><br>
+    <b>商业促销型（企业出资）</b><br>
+    └── API 代金券 / Token 预付费包（阿里/百度/讯飞/移动）
+  </div>
+</section>
+
+<!-- 六、业务场景 -->
+<section id="sec-scenarios">
+  <h2>六、适配业务场景与落地逻辑</h2>
+  <p style="margin-bottom:16px">以下按<strong>企业类型和需求阶段</strong>梳理券种组合策略，覆盖从初创验证到规模化的全周期。</p>
+
+  <h3>6.1 按企业发展阶段</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>需求</th><th>推荐组合</th><th>落地路径</th><th>参考地区</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>🚀 初创验证期</strong></td>
+        <td>低成本试错、快速原型验证</td>
+        <td>算力券 + 算力超市</td>
+        <td>在目标城市注册法人 → 申领算力券（补贴 20–50%）→ 通过算力超市按需采购，按卡时/Token 计费避免大额预付</td>
+        <td>北京（20%/200万）、武汉（50%/20万）、庆阳（总量1亿/年）</td>
+      </tr>
+      <tr>
+        <td><strong>📈 成长扩张期</strong></td>
+        <td>大规模训练、模型迭代、多场景部署</td>
+        <td>算力券 + 模型券 + 场景券</td>
+        <td>扩展至补贴比例更高地区（贵州 30%）→ 叠加模型券降低采购成本 → 在制造业密集地区（山东）申领场景券部署产线验证</td>
+        <td>贵州（智能算力30%+模型30%）、山东（百亿计划+双券联动）</td>
+      </tr>
+      <tr>
+        <td><strong>🏭 成熟应用期</strong></td>
+        <td>跨区域部署、数据资产沉淀</td>
+        <td>全券种组合 + Token 工厂</td>
+        <td>在四川/浙江争取国债资金支持的算力券 → 模型部署到山东/杭州场景券覆盖项目 → 自建或接入 Token 工厂实现商业化输出</td>
+        <td>四川（三券联动）、浙江（超长期特别国债）</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3>6.2 按行业场景</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>行业场景</th><th>核心需求</th><th>推荐券种</th><th>注意事项</th></tr></thead>
+    <tbody>
+      <tr><td><strong>大模型训练</strong></td><td>千卡/万卡 GPU 集群</td><td>算力券</td><td>优先贵州（30%）或庆阳（总量大）。算力资源须在发券省内，合同签后方可申领</td></tr>
+      <tr><td><strong>垂直行业模型</strong></td><td>领域微调+国产适配</td><td>算力券+模型券+语料券</td><td>贵州一站式覆盖（30%×4类）。国产化适配用贵州专项补贴（上限150万）</td></tr>
+      <tr><td><strong>智能制造</strong></td><td>质检/预测维护/工艺优化</td><td>场景券+模型券</td><td>山东最优——百亿资金+双券驱动，每年 30 个标杆项目。杭州萧山"五券"也适用</td></tr>
+      <tr><td><strong>数据标注/语料</strong></td><td>数据采购、标注基地</td><td>语料券 / 贵州算力券</td><td>须通过省级数据交易场所采购，财政资金采购不补贴，需提供数据交付印证</td></tr>
+      <tr><td><strong>大模型 API 服务</strong></td><td>API 调用成本</td><td>词元券（政策）/ Token 包（商业）</td><td>商业路径：阿里/百度/讯飞预付费包。政策路径：等待四川词元券细则</td></tr>
+      <tr><td><strong>AI 应用出海</strong></td><td>跨境合规</td><td>算力超市（商业）</td><td>国内算力券要求资源在境内，出海用阿里云/华为云海外节点。注意数据跨境合规</td></tr>
+      <tr><td><strong>科研机构/高校</strong></td><td>基础研究</td><td>算力券+Token 试用</td><td>北京、庆阳、贵州均将科研机构纳入支持。河南空港智算中心提供 Token 免费试用</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>6.3 决策逻辑</h3>
+  <div class="flow">
+    <b>第一步：确定核心需求</b><br>
+    ├─ 需要 GPU 算力 → <b>算力券</b>，选补贴最高省份（贵州 30% 或武汉 50%）<br>
+    ├─ 需要买/微调模型 → <b>模型券</b>，山东或四川<br>
+    ├─ 需要部署实体场景 → <b>场景券</b>，山东（制造）或杭州萧山（综合）<br>
+    ├─ 需要采购训练数据 → <b>语料券</b>，贵州（数据交易所）或杭州萧山<br>
+    ├─ 需要 API 调用 → <b>词元券</b>（等四川细则）或商业 Token 包<br>
+    └─ 仅需弹性算力 → <b>算力超市</b>，商业比价采购<br><br>
+    <b>第二步：选择省份（叠加策略）</b><br>
+    ├─ 单一需求 → 选该券种补贴最高省份<br>
+    ├─ 多需求 → 优先贵州（五合一）或山东（双券+百亿资金）<br>
+    └─ 跨省布局 → 研发放高补贴省（贵州/庆阳），部署放场景券省（山东/杭州）<br><br>
+    <b>第三步：验证合规</b><br>
+    ├─ 在当地注册？← 几乎所有算力券的前置条件<br>
+    ├─ 算力在指定区域？← 贵州要求物理位置在省内<br>
+    ├─ 未获其他同类补贴？← 各地均禁止重复享受<br>
+    └─ 合同/发票/支付凭证完备？← 政府券种均需"先付后兑"
+  </div>
+
+  <h3>6.4 重点城市政策速查</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>地区</th><th>算力券</th><th>模型券</th><th>场景券</th><th>语料券</th><th>词元券</th><th>特色</th></tr></thead>
+    <tbody>
+      <tr><td><strong>贵州</strong></td><td>✅ 30%</td><td>✅ 30%</td><td>—</td><td>✅ 30%</td><td>—</td><td>覆盖面最广，含国产化适配</td></tr>
+      <tr><td><strong>山东</strong></td><td>✅</td><td>✅</td><td>✅ 百亿</td><td>✅</td><td>—</td><td>资金量最大，制造业最强</td></tr>
+      <tr><td><strong>四川</strong></td><td>✅</td><td>✅ 探索</td><td>✅ 探索</td><td>—</td><td>✅ 启动</td><td>唯一启动词元券的省份</td></tr>
+      <tr><td><strong>浙江</strong></td><td>✅ 国债</td><td>—</td><td>—</td><td>—</td><td>—</td><td>使用超长期特别国债</td></tr>
+      <tr><td><strong>北京</strong></td><td>✅ 20%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>最早推出，至 2025 年底</td></tr>
+      <tr><td><strong>杭州萧山</strong></td><td>✅ 1亿</td><td>✅ 5000万</td><td>✅ 1000万</td><td>✅ 5000万</td><td>—</td><td>"五券"体系最完整</td></tr>
+      <tr><td><strong>庆阳</strong></td><td>✅ 1亿/年</td><td>—</td><td>—</td><td>—</td><td>—</td><td>面向全国，东数西算枢纽</td></tr>
+      <tr><td><strong>武汉</strong></td><td>✅ 50%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>补贴比例最高（50%）</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:6px;color:var(--c-muted);font-size:var(--fs-xs)">"✅"为已发布正式政策；"探索"/"启动"为政策已宣示但细则未出；"—"为暂未覆盖。金额均为人民币。</p>
+</section>
+
+<!-- 来源 -->
+<section id="sec-ref">
+  <h2>主要来源</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>来源</th><th>文件/报道</th></tr></thead>
+    <tbody>
+      <tr><td>工信部</td><td>普惠算力赋能中小企业发展专项行动（2026.4.15）</td></tr>
+      <tr><td>北京市经信局</td><td>《人工智能算力券实施方案（2023—2025年）》（2023.10.11）</td></tr>
+      <tr><td>贵州省大数据局</td><td>《贵州算力券管理办法》黔数〔2026〕3号（2026.1.30）</td></tr>
+      <tr><td>四川省政府</td><td>川办发〔2026〕7号（2026.2.14）/ 川办发〔2026〕14号（2026.5.5）</td></tr>
+      <tr><td>山东省工信厅</td><td>《省级智能"场景券"奖补资金管理办法》征求意见稿（2026.6.10）</td></tr>
+      <tr><td>国务院办公厅</td><td>国办发〔2025〕37号（2025.11.2）</td></tr>
+      <tr><td>财联社/东方财富</td><td>"Token 工厂"开启真实落地（2026.5.16）</td></tr>
+      <tr><td>第一财经</td><td>算力银行与算力超市打开 AI 赋能新大门（2026.5.13）</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>
+  <p>本报告基于公开政府文件、权威媒体报道及多引擎交叉验证编写。已验证来源均可通过 gov.cn 及各省级政府网站公开查阅。</p>
+</footer>
+
+</div>
+
+<!-- ── Nav JS ── -->
+<script>
+(function(){
+  const nav = document.getElementById('toc');
+  const sections = document.querySelectorAll('section[id]');
+  const links = [];
+
+  sections.forEach(sec => {
+    const h2 = sec.querySelector('h2');
+    if (!h2) return;
+    const a = document.createElement('a');
+    a.href = '#' + sec.id;
+    a.textContent = h2.textContent.replace(/^[一二三四五六附]+\S* /,'').replace(/^[0-9.]+ /,'');
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      sec.scrollIntoView({behavior:'smooth'});
+    });
+    nav.appendChild(a);
+    links.push({a, top: sec.offsetTop, bottom: sec.offsetTop + sec.offsetHeight});
+  });
+
+  function update(){
+    const y = window.scrollY + 80;
+    let active = null;
+    for (const l of links) {
+      if (y >= l.top && y < l.bottom) { active = l; break; }
+    }
+    if (!active && links.length && y < links[0].top) active = links[0];
+    links.forEach(l => l.a.classList.toggle('active', l === active));
+  }
+
+  window.addEventListener('scroll', update, {passive: true});
+  update();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>算力网项目储备与规划建设配套政策及保障措施研究报告</title>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1a2332;
+    --muted: #5e6f8d;
+    --blue-50: #eef3fb;
+    --blue-100: #d4e2f7;
+    --blue-200: #a8c6f0;
+    --blue-400: #5a8fd4;
+    --blue-500: #3b74c4;
+    --blue-600: #2560a9;
+    --blue-700: #1b4a8a;
+    --blue-800: #133662;
+    --blue-900: #0d2546;
+    --accent: #2560a9;
+    --accent-light: #3b74c4;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(13,37,70,0.06), 0 1px 2px rgba(13,37,70,0.04);
+    --shadow-md: 0 4px 12px rgba(13,37,70,0.08);
+    --radius: 8px;
+    --nav-w: 260px;
+    --fs-body: 15px;
+    --fs-h1: 1.7em;
+    --fs-h2: 1.22em;
+    --fs-h3: 1.05em;
+    --fs-small: 0.88em;
+    --fs-xs: 0.8em;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body {
+    font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",-apple-system,sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.78; font-size: var(--fs-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed; left: 0; top: 0; width: var(--nav-w); height: 100vh;
+    background: linear-gradient(180deg, var(--blue-900) 0%, var(--blue-800) 100%);
+    overflow-y: auto; z-index: 100; padding: 0;
+    box-shadow: 2px 0 20px rgba(13,37,70,0.12);
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+  .sidebar-header {
+    padding: 28px 22px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 4px;
+  }
+  .sidebar-header .logo {
+    font-size: 1.05em; font-weight: 700; color: #fff; letter-spacing: .03em;
+    line-height: 1.5;
+  }
+  .sidebar-header .sub {
+    font-size: var(--fs-xs); color: rgba(255,255,255,0.5); margin-top: 4px;
+  }
+  .sidebar nav { padding: 8px 0; }
+  .sidebar nav a {
+    display: block; padding: 7px 22px; color: rgba(255,255,255,0.65);
+    text-decoration: none; font-size: var(--fs-small); line-height: 1.55;
+    border-left: 3px solid transparent; transition: all 0.18s;
+    position: relative;
+  }
+  .sidebar nav a:hover { color: #fff; background: rgba(255,255,255,0.07); border-left-color: rgba(255,255,255,0.3); }
+  .sidebar nav a.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.1); border-left-color: #6bb5ff; }
+  .sidebar nav a.sub { padding-left: 36px; font-size: var(--fs-xs); }
+
+  /* ── Main ── */
+  .main { margin-left: var(--nav-w); max-width: 920px; padding: 0 40px 80px; }
+
+  .topbar {
+    background: linear-gradient(135deg, var(--blue-800) 0%, var(--blue-700) 60%, var(--blue-600) 100%);
+    color: #fff; padding: 44px 40px 32px; margin-bottom: 36px; border-radius: 0 0 16px 16px;
+  }
+  .topbar h1 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: .04em; margin-bottom: 8px; line-height: 1.35; }
+  .topbar .subtitle { font-size: 1em; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
+  .topbar .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: var(--fs-xs); color: rgba(255,255,255,0.45); margin-top: 14px; }
+
+  section { margin: 42px 0; }
+  h2 {
+    font-size: var(--fs-h2); font-weight: 700; color: var(--blue-800);
+    border-left: 4px solid var(--accent); padding-left: 14px; margin-bottom: 20px;
+    letter-spacing: .02em;
+  }
+  h3 {
+    font-size: var(--fs-h3); font-weight: 700; margin: 28px 0 12px; color: var(--blue-700);
+  }
+  h4 { font-size: 0.98em; font-weight: 700; margin: 18px 0 8px; color: #374151; }
+
+  p { margin: 10px 0; }
+  blockquote {
+    border-left: 3px solid var(--blue-300); margin: 12px 0; padding: 10px 18px;
+    background: var(--blue-50); border-radius: 0 6px 6px 0; color: var(--blue-700);
+    font-style: italic; font-size: 0.95em;
+  }
+  strong { color: var(--blue-700); }
+
+  .card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 22px 28px; margin: 18px 0; border: 1px solid var(--border);
+  }
+  .card.accent { border-left: 3px solid var(--accent); }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0; margin: 10px 0;
+    font-size: var(--fs-small); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);
+  }
+  thead th {
+    background: var(--blue-50); color: var(--blue-700); font-weight: 700;
+    padding: 10px 14px; white-space: nowrap; font-size: 0.9em; letter-spacing: .02em;
+    border-bottom: 2px solid var(--blue-200);
+  }
+  tbody td {
+    padding: 9px 14px; vertical-align: top; border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--blue-50); }
+  tbody td:first-child { font-weight: 500; }
+
+  /* ── Tags ── */
+  .tag {
+    display: inline-block; font-size: 0.72em; font-weight: 700; padding: 3px 10px;
+    border-radius: 99px; letter-spacing: .03em;
+  }
+  .tag-blue { background: var(--blue-50); color: var(--blue-600); }
+
+  /* ── Stats row ── */
+  .stats { display: flex; flex-wrap: wrap; gap: 14px; margin: 16px 0; }
+  .stat {
+    flex: 1 1 130px; background: var(--card); border-radius: var(--radius);
+    padding: 18px 16px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);
+  }
+  .stat .n { font-size: 1.5em; font-weight: 700; color: var(--accent); }
+  .stat .l { font-size: var(--fs-xs); color: var(--muted); margin-top: 4px; }
+
+  /* ── Flow ── */
+  .flow {
+    background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: var(--radius);
+    padding: 16px 20px; margin: 14px 0; font-size: var(--fs-small); line-height: 2;
+  }
+  .flow b { color: var(--blue-800); }
+
+  ul, ol { margin: 8px 0 8px 22px; } li { margin: 5px 0; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  footer {
+    margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: var(--fs-xs); text-align: center;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 860px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 0 16px 48px; }
+    .topbar { padding: 28px 20px 22px; border-radius: 0; }
+    .topbar h1 { font-size: 1.3em; }
+    .card { padding: 16px 14px; }
+    table { font-size: 0.78em; } th, td { padding: 6px 8px; }
+    .stats { gap: 8px; } .stat { flex: 1 1 100px; padding: 12px 8px; }
+  }
+
+  @media print {
+    .sidebar { display: none; } .main { margin-left: 0; }
+    body { font-size: 13px; background: #fff; }
+    .topbar { background: var(--blue-800) !important; -webkit-print-color-adjust: exact; }
+    .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    table { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ Sidebar ════ -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">📊 算力网研究报告</div>
+    <div class="sub">算力互联网 &middot; 项目储备 &middot; 政策保障</div>
+  </div>
+  <nav id="toc"></nav>
+</aside>
+
+<!-- ════ Main ════ -->
+<div class="main">
+
+<header class="topbar">
+  <h1>算力网项目储备与规划建设配套政策及保障措施研究报告</h1>
+  <p class="subtitle">基于中国信通院2025—2026年系列蓝皮书、国家部委政策文件及权威媒体报道</p>
+  <div class="meta">
+    <span>📅 2026年6月</span>
+    <span>📚 8份核心文献</span>
+    <span>🔍 网络搜索交叉验证</span>
+  </div>
+</header>
+
+<!-- ════ 摘要 ════ -->
+<section id="sec-abstract">
+  <h2>摘要</h2>
+  <div class="card accent">
+    <p>算力网是数字经济时代的核心基础设施，已被<strong>"十五五"规划纳入现代化基础设施体系</strong>。本报告以中国信通院2025—2026年系列蓝皮书和七部门政策文件为核心依据，系统梳理了算力互联网体系架构、八大枢纽十大集群项目储备与建设进展、从国家到地方的配套政策工具体系（算力券/Token券/场景券/模型券等）、以及组织、资金、用地、能源、技术、人才、安全、东西协同八维保障措施，并结合全球算力竞争格局——美国"星际之门"5000亿美元、欧盟2000亿欧元等——分析我国算力网的战略定位与发展趋势。</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n">1085万</div><div class="l">在用标准机架</div></div>
+    <div class="stat"><div class="n">788 EFLOPS</div><div class="l">智能算力规模</div></div>
+    <div class="stat"><div class="n">962 EFLOPS</div><div class="l">计算设备总算力</div></div>
+    <div class="stat"><div class="n">1509个</div><div class="l">大模型（全球40.2%）</div></div>
+    <div class="stat"><div class="n">22省</div><div class="l">算力券覆盖</div></div>
+    <div class="stat"><div class="n">155企</div><div class="l">1+M+N节点接入</div></div>
+  </div>
+</section>
+
+<!-- ════ 第一章 ════ -->
+<section id="sec-ch1">
+  <h2>一、算力互联网：体系架构与技术底座</h2>
+
+  <h3>1.1 概念定义与战略背景</h3>
+  <div class="card">
+    <p>中国信通院在《算力互联网体系架构研究报告（2025年）》中首次系统定义了<strong>"算力互联网（Internet of Compute）"</strong>：</p>
+    <blockquote>算力互联网是指互联网面向计算任务与调度需求进行能力增强和系统升级，通过在互联网上构建统一算力标识和协议接口、增强异构计算和跨域高性能网络传输能力等方式，使计算任务及其相关数据可精准寻找相适应的算力资源并高效执行，形成算力之间智能感知、实时发现和随需获取的一张逻辑互联网络。</blockquote>
+    <p>2025年8月，国务院印发《关于深入实施"人工智能+"行动的意见》，提出"加强智能算力互联互通和供需匹配"。工信部印发《算力互联互通行动计划》，形成<strong>"先互联、再成网、同步建市场"</strong>的总体思路。</p>
+  </div>
+
+  <h3>1.2 三层体系架构</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>层级</th><th>功能定位</th><th>核心设施/平台</th></tr></thead>
+    <tbody>
+      <tr><td><strong>算网设施层</strong></td><td>底层资源载体</td><td>通算/智算/超算数据中心，公共互联网、企业算力专网、全光网400G/800G</td></tr>
+      <tr><td><strong>互联资源层</strong></td><td>核心调度中枢</td><td>"1+M+N"节点体系（1个国家平台+M个区域节点+N个行业节点）</td></tr>
+      <tr><td><strong>应用服务层</strong></td><td>用户交付窗口</td><td>算力调配接入服务、传统资源式服务、任务式应用服务</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>协议架构在兼容传统互联网OSI五层模型基础上，在传输层引入<strong>RDMA</strong>等低时延、高吞吐传输协议，显著提升大规模数据交换场景下的传输效率。</p>
+
+  <h3>1.3 "1+M+N"算力互联互通节点体系</h3>
+  <p>工信部2026年1月印发《关于组织开展国家算力互联互通节点建设工作的通知》，部署全国节点体系。以<strong>"1"</strong>个已建成发布的国家算力互联网服务节点为核心，建设覆盖<strong>"M"</strong>个区域节点和<strong>"N"</strong>个行业节点的体系。</p>
+  <div class="card accent">
+    <p><strong>截至2026年1月15日建设成效：</strong></p>
+    <ul>
+      <li>接入 <strong>31个</strong>省（区、市）的 <strong>155家</strong>企业</li>
+      <li>覆盖 <strong>578个</strong>资源池，<strong>316 EFLOPS</strong>智算资源</li>
+      <li><strong>72万张</strong>GPU加速卡</li>
+      <li>部署完成 <strong>1032万条</strong>算力标识</li>
+      <li>开通数据专线 <strong>52条</strong>，月均调度近 <strong>300次</strong></li>
+    </ul>
+  </div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>平台</th><th>算力服务商</th><th>算力资源</th></tr></thead>
+    <tbody>
+      <tr><td>北京市算力互联互通和运行服务平台</td><td>45家</td><td>3.9万P，覆盖京津冀蒙晋</td></tr>
+      <tr><td>长三角（上海）算力互联互通平台</td><td>362家</td><td>1.83万P，覆盖沪京呼皖港</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>运行机制实行<strong>"三统一"</strong>：统一标识、统一标准、统一规则。</p>
+
+  <h3>1.4 流程机理：四大核心环节</h3>
+  <div class="flow">
+    <b>① 计算任务识别</b> → 标准化定义任务类型、性能要求、数据位置等参数<br>
+    <b>② 任务算力匹配</b> → 依托统一算力标识体系，构建"任务—资源"映射<br>
+    <b>③ 数据传输流动</b> → 全光网络、弹性网络等高性能通道，RDMA远程直接内存访问<br>
+    <b>④ 任务计算执行</b> → 异构计算框架部署执行，可监控、可管理
+  </div>
+
+  <h3>1.5 六大核心技术体系</h3>
+  <p>中兴通讯技术期刊（2026年2月）系统阐述了算力网六大核心技术体系：</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>技术体系</th><th>核心创新</th><th>现网验证成果</th></tr></thead>
+    <tbody>
+      <tr><td><strong>算力路由技术</strong></td><td>全球首台CATS Router（中国移动），扩展BGP实现算力因子路由</td><td>5省20地市验证，云渲染时延减少24.5%，算网容量提升37.5%</td></tr>
+      <tr><td><strong>高通量数据网</strong></td><td>SRv6网络编程+智能管控+端侧优化</td><td>上海-宁夏广域传输测试，带宽利用率显著提升</td></tr>
+      <tr><td><strong>分布式智算组网</strong></td><td>800G C+L波分复用+广域无损RDMA+全局负载均衡</td><td>1024卡集群120km分布式训练，效率达集中训练<strong>95%以上</strong></td></tr>
+      <tr><td><strong>智融标识网络</strong></td><td>"三层三域"架构，富语义多维融合标识</td><td>北京交通大学基于中国电信大科创装置验证</td></tr>
+      <tr><td><strong>星织网络架构</strong></td><td>华为超融合方案，400GE集群，AIECN+NSLB</td><td>网络吞吐率<strong>>95%</strong>，算力效率提升10%，设备数量降低20%</td></tr>
+      <tr><td><strong>算力互联测量感知</strong></td><td>新型大二层交换互联架构+稀疏感知测量</td><td>东西向调度网络时延<strong>降低77%</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ════ 第二章 ════ -->
+<section id="sec-ch2">
+  <h2>二、项目储备：八大枢纽十大集群建设全景</h2>
+
+  <h3>2.1 全国算力总体规模</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th><th>时间节点</th></tr></thead>
+    <tbody>
+      <tr><td>全国在用算力中心机架总规模</td><td><strong>1085万</strong>标准机架</td><td>2025年6月</td></tr>
+      <tr><td>智能算力规模（FP16）</td><td><strong>788 EFLOPS</strong></td><td>2025年6月</td></tr>
+      <tr><td>全国智算规模</td><td><strong>1590 EFLOPS</strong></td><td>2026年初</td></tr>
+      <tr><td>智能算力同比增长</td><td><strong>96%</strong></td><td>2025年6月</td></tr>
+      <tr><td>智能算力占总算力比重</td><td><strong>>80%</strong></td><td>2025年6月</td></tr>
+      <tr><td>全国存力规模</td><td><strong>1680 EB</strong></td><td>2025年6月</td></tr>
+      <tr><td>全国数据存储总量</td><td><strong>2.09 ZB</strong>（同比+20.81%）</td><td>2024年</td></tr>
+      <tr><td>八大枢纽节点算力总规模</td><td><strong>215.5 EFLOPS</strong></td><td>2025年Q1</td></tr>
+      <tr><td>计算设备总算力规模</td><td><strong>962 EFLOPS</strong>（全球占比21%）</td><td>2025年6月</td></tr>
+      <tr><td>全国大模型数量</td><td><strong>1509个</strong>（全球占比~40.2%）</td><td>2025年6月</td></tr>
+      <tr><td>生成式AI备案服务</td><td><strong>439项</strong></td><td>2025年6月</td></tr>
+      <tr><td>我国AI产业规模</td><td>突破 <strong>9000亿元</strong>（同比+24%）</td><td>2024年</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>2.2 八大枢纽十大集群项目详表</h3>
+
+  <h4>（1）京津冀枢纽 — 张家口集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>已建成和部分建成投运数据中心项目</td><td><strong>30个</strong></td></tr>
+      <tr><td>投运标准机架</td><td><strong>44万架</strong></td></tr>
+      <tr><td>服务器</td><td><strong>153万台</strong></td></tr>
+      <tr><td>京津冀算力占全国</td><td><strong>超1/3</strong></td></tr>
+      <tr><td>智能算力占全国</td><td><strong>超25%</strong></td></tr>
+      <tr><td>省级政策</td><td>北京市《算力基础设施建设实施方案（2024—2027年）》，2025年智算45 EFLOPS；河北省《关于进一步优化算力布局推动人工智能产业创新发展的意见》</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（2）长三角枢纽 — 芜湖集群 + 示范区集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>起步区数据中心项目</td><td><strong>17个</strong></td></tr>
+      <tr><td>设计装机规模</td><td><strong>64万架</strong></td></tr>
+      <tr><td>投资额</td><td><strong>约2588亿元</strong></td></tr>
+      <tr><td>后续引进重点项目（华为、抖音、三大运营商等）</td><td><strong>15个</strong>，总投资<strong>2700多亿元</strong></td></tr>
+      <tr><td>智算规模</td><td><strong>3999P</strong></td></tr>
+      <tr><td>省级政策</td><td>上海算力券补贴建设者和使用者双向模式；浙江率先使用超长期特别国债资金支持算力券</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（3）粤港澳大湾区枢纽 — 韶关集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>已批准机架</td><td><strong>超40万架</strong>（接近2025年50万架目标）</td></tr>
+      <tr><td>广东省综合算力指数</td><td><strong>67.5</strong>（全国第一）</td></tr>
+      <tr><td>广东省数据中心</td><td><strong>约230个</strong>，标准机架<strong>约62万架</strong>，占全国<strong>9.5%</strong></td></tr>
+      <tr><td>腾讯韶关智算中心</td><td>投资<strong>50亿元</strong>（2024年Q4动工）</td></tr>
+      <tr><td>国产化率</td><td><strong>约90%</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（4）成渝枢纽 — 天府集群 + 重庆集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>四川算力互联互通平台</td><td>接入中国移动四川区域超<strong>540 PFLOPS</strong>算力</td></tr>
+      <tr><td>成渝（四川）平台</td><td>上架超<strong>20种</strong>算力规格，支撑<strong>10余家</strong>客户</td></tr>
+      <tr><td>省级政策</td><td>四川省《算力基础设施高质量发展行动方案（2024—2027年）》，绿电直供、源网荷储一体化；<strong>2026年5月首提"词元（Token）券"</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（5）内蒙古枢纽 — 和林格尔集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>集聚数据中心项目</td><td><strong>32个</strong></td></tr>
+      <tr><td>已投用标准机架</td><td><strong>26.6万架</strong>（截至2024年5月）</td></tr>
+      <tr><td>服务器装机能力</td><td><strong>150万台</strong></td></tr>
+      <tr><td>总算力规模</td><td><strong>超10000P</strong></td></tr>
+      <tr><td>省级政策</td><td>2024年出台《关于支持内蒙古和林格尔集群绿色算力产业发展的若干政策》；全国唯一同时承担大数据综合试验区和算力枢纽节点地区</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（6）贵州枢纽 — 贵安集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>累计引进大型及以上数据（算力）中心</td><td><strong>26个</strong></td></tr>
+      <tr><td>贵安集群算力规模</td><td>突破<strong>81 EFLOPS</strong>，智算<strong>79 EFLOPS</strong>（截至2025年6月）</td></tr>
+      <tr><td>全省枢纽节点投运及在建项目</td><td><strong>49个</strong>，总规模超<strong>9.2万PFlops</strong></td></tr>
+      <tr><td>全球服务覆盖</td><td><strong>50多个</strong>国家和地区，<strong>20多万</strong>用户</td></tr>
+      <tr><td>液冷规划</td><td>到2025年<strong>50%以上</strong>数据中心应用液冷，未来<strong>100%绿电供应</strong></td></tr>
+      <tr><td>省级政策</td><td>贵州算力券覆盖面最广（5大类），智能算力补贴30%、通用算力补贴5%，即申即享</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（7）甘肃枢纽 — 庆阳集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>已建成标准机架</td><td><strong>3.1万架</strong>（截至2024年底）</td></tr>
+      <tr><td>算力规模</td><td>突破<strong>5万P</strong>（5.1万P）</td></tr>
+      <tr><td>数字经济企业落户</td><td><strong>300余家</strong>，含国内<strong>半数</strong>AI头部企业</td></tr>
+      <tr><td>产业园区</td><td>占地<strong>1.7万亩</strong>全面铺开</td></tr>
+      <tr><td>万卡集群</td><td>提速建设<strong>10个</strong></td></tr>
+      <tr><td>"结对子"城市</td><td><strong>26个</strong></td></tr>
+      <tr><td>注册数字经济企业</td><td>超<strong>450户</strong></td></tr>
+      <tr><td>上架率</td><td><strong>约83.8%</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（8）宁夏枢纽 — 中卫集群</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>数据中心产业园</td><td><strong>八大</strong></td></tr>
+      <tr><td>全国首批"万卡+"智算基地</td><td>✅</td></tr>
+      <tr><td>算力规模</td><td><strong>12.6万P</strong></td></tr>
+      <tr><td>智算规模全国十大集群排名</td><td><strong>第三</strong></td></tr>
+      <tr><td>入驻企业</td><td>亚马逊、美利云、中国移动、中国联通等</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>2.3 综合算力指数排名</h3>
+  <p>中国信通院《综合算力指数蓝皮书（2025年）》发布综合算力指数4.0，新增<strong>"模力"</strong>维度。我国综合算力格局呈现<strong>"东部引领、中西部崛起"</strong>的协同发展态势。</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>维度</th><th>Top3省份</th></tr></thead>
+    <tbody>
+      <tr><td><strong>综合算力指数</strong></td><td>河北、江苏、广东</td></tr>
+      <tr><td><strong>算力分指数</strong></td><td>河北、浙江、江苏</td></tr>
+      <tr><td><strong>存力分指数</strong></td><td>广东、江苏、河北</td></tr>
+      <tr><td><strong>运力分指数</strong></td><td>浙江、上海、江苏</td></tr>
+      <tr><td><strong>模力分指数</strong></td><td>北京、广东、浙江</td></tr>
+      <tr><td><strong>环境分指数</strong></td><td>青海、内蒙古、河北</td></tr>
+      <tr><td><strong>城市算力分指数</strong></td><td>廊坊、张家口、大同、广州、杭州</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>2.4 先进计算产业格局</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>全球计算设备算力总规模</td><td><strong>4495 EFLOPS</strong>（智能算力占比85%）</td></tr>
+      <tr><td>我国计算设备算力总规模</td><td><strong>962 EFLOPS</strong>（全球占比21%，增速73%）</td></tr>
+      <tr><td>国产品牌整机市场占有率</td><td><strong>超过75%</strong></td></tr>
+      <tr><td>全球AI服务器市场</td><td><strong>1401亿美元</strong>（2024年，增长168%）</td></tr>
+      <tr><td>全球AI芯片市场</td><td><strong>795.86亿美元</strong>（2024年，增长>120%）</td></tr>
+      <tr><td>我国智算市场规模</td><td><strong>190亿美元</strong>（2024年，增长86.9%）</td></tr>
+      <tr><td>中国GPU市场格局</td><td>英伟达70%，华为昇腾23%（2024年）</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ════ 第三章 ════ -->
+<section id="sec-ch3">
+  <h2>三、配套政策体系</h2>
+
+  <h3>3.1 国家层面政策框架</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>时间</th><th>政策文件</th><th>核心内容</th></tr></thead>
+    <tbody>
+      <tr><td>2021年</td><td>《关于加快构建全国一体化大数据中心协同创新体系的指导意见》</td><td>顶层设计框架</td></tr>
+      <tr><td><strong>2023.12</strong></td><td><strong>《关于深入实施"东数西算"工程加快构建全国一体化算力网的实施意见》（发改数据〔2023〕1779号）</strong></td><td><strong>核心实施纲领：五大统筹任务</strong></td></tr>
+      <tr><td>2024年</td><td>《数据中心绿色低碳发展专项行动计划》</td><td>绿色低碳标准</td></tr>
+      <tr><td>2025年</td><td>《算力互联互通行动计划》</td><td>"先互联、再成网、同步建市场"</td></tr>
+      <tr><td>2025.08</td><td>《关于深入实施"人工智能+"行动的意见》（国务院）</td><td>智能算力互联互通和供需匹配</td></tr>
+      <tr><td><strong>2026.01</strong></td><td><strong>《关于组织开展国家算力互联互通节点建设工作的通知》</strong></td><td><strong>"1+M+N"节点体系正式部署</strong></td></tr>
+      <tr><td>2026.04</td><td>工信部"算力超市"概念</td><td>到2028年建成全国普惠算力服务体系</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>3.2 发改数据〔2023〕1779号核心内容</h3>
+  <p>五部门联合印发的这一文件是算力网建设的纲领性文件，提出<strong>五大统筹任务</strong>和2025年底关键目标：</p>
+  <div class="flow">
+    <b>统筹一</b>：通用算力、智能算力、超级算力的一体化布局 — 枢纽节点外不得新建大型/超大型数据中心<br>
+    <b>统筹二</b>：东中西部算力的一体化协同 — 1ms/5ms/20ms三级时延圈，400G/800G高带宽全光连接<br>
+    <b>统筹三</b>：算力与数据、算法的一体化应用 — 隐私计算、联邦学习、区块链构建可信计算网络<br>
+    <b>统筹四</b>：算力与绿色电力的一体化融合 — 新建数据中心绿电占比>80%，PUE最低降至1.10<br>
+    <b>统筹五</b>：算力发展与安全保障的一体化推进 — 全栈防护体系、攻防演习靶场
+  </div>
+  <div class="card accent">
+    <p><strong>2025年底关键目标：</strong>枢纽节点新增算力占全国<strong>60%以上</strong>；新建数据中心<strong>绿电占比>80%</strong>；1ms城市/5ms区域/<strong>20ms跨枢纽</strong>时延圈；关键核心技术基本实现安全可靠。</p>
+  </div>
+
+  <h3>3.3 券种政策工具体系（2023—2026演进）</h3>
+  <p>截至2025年底，全国累计出台国家层面算力相关政策<strong>71条</strong>、省市层面<strong>117条</strong>。</p>
+
+  <h4>（1）算力券 — 最成熟的普惠政策工具</h4>
+  <p>全国<strong>22个省级行政区</strong>出台算力券政策，覆盖至少15+城市/省份。</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>地区</th><th>补贴比例</th><th>年上限</th><th>特色</th></tr></thead>
+    <tbody>
+      <tr><td><strong>贵州</strong></td><td>智能30%/通用5%</td><td>200万/企</td><td>覆盖面最广（5大类），即申即享，含实物券</td></tr>
+      <tr><td><strong>北京</strong></td><td>20%</td><td>200万/企</td><td>最早推出（2023.10）</td></tr>
+      <tr><td><strong>武汉</strong></td><td>50%</td><td>20万/企</td><td>补贴比例最高</td></tr>
+      <tr><td><strong>庆阳</strong></td><td>—</td><td><strong>1亿元</strong>/年总额</td><td>面向全国，"东数西算"枢纽</td></tr>
+      <tr><td><strong>湖南</strong></td><td>30%</td><td>1000万/企/年</td><td>2026年5月发布实施细则，每年集中评审发放</td></tr>
+      <tr><td><strong>浙江</strong></td><td>—</td><td>—</td><td>率先使用超长期特别国债</td></tr>
+      <tr><td><strong>杭州萧山</strong></td><td>—</td><td>2.4亿/年（五券总额）</td><td>五券齐发（场景/数改/算力/语料/模型），其中算力券1亿元</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（2）Token券（词元券） — 2026年进入官方政策</h4>
+  <div class="card accent">
+    <p>2026年5月，四川省川办发〔2026〕14号<strong>首次在省级政府正式文件中提出"词元（Token）券"</strong>，标志着从商业营销概念进入政策工具范畴。</p>
+    <p><strong>核心区分：</strong>商业"Token券"（云厂商促销）≠ 政府"词元券"（财政补贴）。判断标准：看发放主体是云厂商还是政府，看申领渠道是企业官网还是政府平台。</p>
+  </div>
+
+  <h4>（3）场景券 — 快速制度化</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>文件</th><th>核心内容</th><th>时间</th></tr></thead>
+    <tbody>
+      <tr><td>四川川办发〔2026〕7号</td><td>"扩容省级'算力券'，探索制定'场景券''模型券'政策"</td><td>2026.02</td></tr>
+      <tr><td>山东工信厅</td><td>《省级智能"场景券"奖补资金管理办法》征求意见稿</td><td>2026.06</td></tr>
+      <tr><td>山东财政厅</td><td>"未来三年引导超<strong>100亿元</strong>财政资金"</td><td>2026.05</td></tr>
+      <tr><td>杭州萧山区</td><td>"五券"年总额<strong>2.4亿元</strong>（含场景券/数改券/算力券/语料券/模型券）</td><td>2025.09</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>（4）Token工厂 — 从概念到百亿级产业实践</h4>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>事件</th><th>规模/详情</th></tr></thead>
+    <tbody>
+      <tr><td>中国电信「Token工厂」集采</td><td><strong>174.38亿元</strong>（含税），11个标包</td></tr>
+      <tr><td>百度「Token Factory」品牌</td><td>2026.5.13正式升级</td></tr>
+      <tr><td>阿里AI产品季度收入</td><td>89.71亿元（年化超358亿）；百炼MaaS平台ARR目标年底300亿</td></tr>
+      <tr><td>中国移动Token运营生态联盟</td><td>2026.5.8发布，联合腾讯、阿里、华为、中兴、讯飞</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>3.4 "窗口指导"机制</h3>
+  <p>2025年4月起，国家对算力中心建设实施<strong>"窗口指导"</strong>，算力中心项目全部纳入窗口指导范围，明确管住非专业化力量、枢纽节点以外建设限制。</p>
+
+  <h3>3.5 各省市专项政策一览</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>省份</th><th>政策文件</th><th>核心目标</th></tr></thead>
+    <tbody>
+      <tr><td><strong>北京</strong></td><td>《算力基础设施建设实施方案（2024—2027年）》</td><td>2025年智算45 EFLOPS</td></tr>
+      <tr><td><strong>河南</strong></td><td>《算力基础设施发展规划（2024—2026年）》</td><td>抢占算力服务黄金赛道</td></tr>
+      <tr><td><strong>福建</strong></td><td>《算力网建设实施方案》（2025.12）</td><td>加快融入全国一体化算力网</td></tr>
+      <tr><td><strong>四川</strong></td><td>《算力基础设施高质量发展行动方案（2024—2027年）》</td><td>绿电直供、源网荷储一体化</td></tr>
+      <tr><td><strong>武汉</strong></td><td>《算力基础设施行动计划》</td><td>2025年建成布局合理的算力设施</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ════ 第四章 ════ -->
+<section id="sec-ch4">
+  <h2>四、保障措施</h2>
+
+  <h3>4.1 组织保障与统筹协调</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>机制</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td><strong>国家级统筹</strong></td><td>依托新型基础设施建设推进协调机制，国家发改委、国家数据局、工信部会同中央网信办、国家能源局加强统筹</td></tr>
+      <tr><td><strong>省市级机制</strong></td><td>"省级统筹、地方主体、协调联动"原则；跨部门、跨区域、跨层级联动响应与协作</td></tr>
+      <tr><td><strong>清单式管理</strong></td><td>重点算力基础设施项目实施清单式管理，落实备案管理</td></tr>
+      <tr><td><strong>窗口指导</strong></td><td>2025年4月起全面实施，管住非专业化力量</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>4.2 资金保障：多元化投融资体系</h3>
+  <div class="card accent">
+    <ul>
+      <li><strong>REITs融资</strong>：支持绿色数据中心集群、传输网络、城市算力网等项目发行基础设施REITs</li>
+      <li><strong>专项债券</strong>：探索发行大型基础设施建设专项债，强化政策性金融支持</li>
+      <li><strong>算力券/Token券/场景券</strong>：22省算力券，山东百亿级场景券/模型券计划，浙江率先使用超长期特别国债</li>
+      <li><strong>市场化投融资</strong>：中国电信Token工厂174亿元集采、阿里AI MaaS ARR 358亿元、百度Token Factory</li>
+    </ul>
+  </div>
+
+  <h3>4.3 用地与能源保障</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>保障方向</th><th>具体措施</th></tr></thead>
+    <tbody>
+      <tr><td><strong>土地供给</strong></td><td>算力基础设施与城市规划、土地利用规划衔接；预留园区配套数据中心建设空间</td></tr>
+      <tr><td><strong>绿电直供</strong></td><td>西部枢纽利用风光水电优势，探索分布式新能源参与绿电交易</td></tr>
+      <tr><td><strong>源网荷储</strong></td><td>支持新型电力系统模式，2024年在京津冀、长三角、内蒙古及青海、新疆部署算电协同先行先试</td></tr>
+      <tr><td><strong>节能技术</strong></td><td>PUE最低降至<strong>1.10</strong>；液冷技术推广（贵安规划50%以上应用）；先进数据中心绿电使用率达<strong>80%</strong></td></tr>
+      <tr><td><strong>碳汇机制</strong></td><td>鼓励数据中心间碳汇互认结算，推动东西部枢纽节点间碳汇补偿试点</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>4.4 技术保障</h3>
+  <div class="card accent">
+    <ul>
+      <li><strong>共性技术研发</strong>：建设全国一体化算力网原型技术实验场，组建国家级算力网共性技术研发平台，关键技术"揭榜挂帅"</li>
+      <li><strong>标准体系</strong>：制定算力并网标准，探索统一度量/计费/交易/结算标准体系；中国信通院牵头多项国标、行标；155企共316 EFLOPS智算完成标准化标识</li>
+      <li><strong>六大核心技术验证</strong>：算力路由（移动5省20地市）、高通量数据网（联通沪宁）、分布式智算（电信1024卡120km效率>95%）、星织网络（华为400GE吞吐率>95%）、智融标识网络（北交大）、算力互联测量（时延降77%）</li>
+    </ul>
+  </div>
+
+  <h3>4.5 人才保障</h3>
+  <p>各地配套税收减免、安家补贴、子女入学、配偶安置、就医保障等优惠政策和便利服务。发挥科研机构、行业协会、产业联盟作用。2025年试验体系累计调度<strong>2000万卡时</strong>。</p>
+
+  <h3>4.6 安全保障</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>保障层面</th><th>具体措施</th></tr></thead>
+    <tbody>
+      <tr><td><strong>关键信息基础设施保护</strong></td><td>超大规模智算集群、全国一体化算力监测调度平台、重要电力枢纽纳入保护范围</td></tr>
+      <tr><td><strong>全栈防护体系</strong></td><td>覆盖算力基础设施安全、云平台、容器、应用、运营</td></tr>
+      <tr><td><strong>风险预警</strong></td><td>算力网风险预警体系和评价指标，安全风险研判/防控协同/防范化解机制</td></tr>
+      <tr><td><strong>攻防演习</strong></td><td>网络和数据攻防演习靶场，定期开展攻防演习</td></tr>
+      <tr><td><strong>供应链安全</strong></td><td>强化网络设备供应链安全；韶关集群国产化率达90%；华为昇腾GPU市占率23%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>4.7 东西部协同机制</h3>
+  <div class="flow">
+    <b>算力"飞地"</b> → 依托国家枢纽节点打造面向算力需求旺盛地区的算力飞地<br>
+    <b>"结对子"</b> → 庆阳与26个城市聚焦智算合作成功结对；点对点推动西部枢纽与东部城市协同调度<br>
+    <b>专项网络计费</b> → 弹性带宽、任务式服务、数据快递等创新模式，降低网络使用成本<br>
+    <b>弹性计费</b> → 从"包年包月"向"随接随用、按需付费"转变，支持"卡时"结算
+  </div>
+</section>
+
+<!-- ════ 第五章 ════ -->
+<section id="sec-ch5">
+  <h2>五、全球算力竞争格局与中国定位</h2>
+
+  <h3>5.1 主要国家算力战略投入对比</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>国家/地区</th><th>核心计划</th><th>投资规模</th><th>战略目标</th></tr></thead>
+    <tbody>
+      <tr><td><strong>美国</strong></td><td>"星际之门"、AI行动计划</td><td><strong>5000亿美元</strong></td><td>构建美系全球算力互联网，以10国为起点</td></tr>
+      <tr><td><strong>欧盟</strong></td><td>"人工智能大陆行动计划"</td><td><strong>2000亿欧元</strong></td><td>2032年算力翻3倍，覆盖17国13个AI工厂</td></tr>
+      <tr><td><strong>中国</strong></td><td>"东数西算"+一体化算力网</td><td>累计投资>435亿元（仅八大节点，截至2024.06）</td><td>先互联、再成网、同步建市场，赋能AI+千行百业</td></tr>
+      <tr><td><strong>英国</strong></td><td>"人工智能机遇行动计划"</td><td><strong>140亿英镑</strong></td><td>2032年AI算力扩20倍</td></tr>
+      <tr><td><strong>法国</strong></td><td>国家AI战略第三阶段</td><td><strong>1090亿欧元</strong></td><td>打造"欧洲算力枢纽"</td></tr>
+      <tr><td><strong>日本</strong></td><td>ABCI 3.0超算+产业基金</td><td><strong>10万亿日元</strong></td><td>先进芯片+AI基础设施</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>5.2 中国算力网的全球比较优势</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>维度</th><th>中国优势</th></tr></thead>
+    <tbody>
+      <tr><td><strong>政策系统性</strong></td><td>国家到省市三级政策体系，71条国家+117条省市政策</td></tr>
+      <tr><td><strong>枢纽布局</strong></td><td>八大枢纽十大集群完整空间布局，东西部资源禀赋互补</td></tr>
+      <tr><td><strong>市场规模</strong></td><td>大模型数量全球第一（40.2%），AI产业9000亿规模</td></tr>
+      <tr><td><strong>互联互通</strong></td><td>"1+M+N"节点体系全球领先，已接入31省155企316 EFLOPS</td></tr>
+      <tr><td><strong>技术创新</strong></td><td>算力路由、高通量数据网、星织架构等六大技术体系全球领先验证</td></tr>
+      <tr><td><strong>绿色算力</strong></td><td>西部清洁能源+源网荷储，PUE最低1.10</td></tr>
+      <tr><td><strong>国产替代</strong></td><td>整机国产化率>75%，昇腾GPU市占率23%且快速提升</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ════ 第六章 ════ -->
+<section id="sec-ch6">
+  <h2>六、发展趋势与展望</h2>
+
+  <h3>6.1 算力互联网加速成型</h3>
+  <p>工信部目标：到2026年建立较完备的算力互联互通标准、标识和规则体系；到<strong>2028年</strong>基本实现全国公共算力标准化互联，形成具备智能感知、实时发现、随需获取的算力互联网。</p>
+
+  <h3>6.2 智能算力成为绝对主导</h3>
+  <p>智能算力占全国算力比重已超过<strong>80%</strong>，同比增长96%。据巴克莱预计，AI推理计算需求未来将占通用人工智能总计算需求的<strong>70%以上</strong>。IDC预测到2025年中国智能算力内部结构中推理占比将升至<strong>72.6%</strong>。</p>
+
+  <h3>6.3 服务模式从"资源租赁"向"任务式交付"升级</h3>
+  <p>智能算力服务区别于云服务的核心在于：<strong>交付形态</strong>（Token/训练任务/渲染作业）、<strong>技术重心</strong>（异构计算/智能调度/高速互联）、<strong>计费逻辑</strong>（按计算任务复杂度或实际产出）。Token工厂从概念走向产业——中国电信174亿元集采、阿里ARR 358亿元。</p>
+
+  <h3>6.4 绿色算力成为硬约束</h3>
+  <p>枢纽节点新建数据中心绿电占比>80%，液冷技术规模化应用。贵安集群已规划<strong>100%绿电供应</strong>路径。</p>
+
+  <h3>6.5 国产化替代加速</h3>
+  <p>国产品牌整机市占率超<strong>75%</strong>，华为昇腾GPU市占率<strong>23%</strong>（2024年）且快速提升，韶关集群国产化率已达<strong>90%</strong>。"核高基"等国家专项持续支持核心技术自主可控。</p>
+
+  <h3>6.6 "十五五"新定位</h3>
+  <p>"十五五"规划建议<strong>首次将"全国一体化算力网"纳入现代化基础设施体系</strong>，标志着算力网从新型基础设施上升为国家现代化基础设施的重要组成部分。</p>
+</section>
+
+<!-- ════ 附录 ════ -->
+<section id="sec-appendix">
+  <h2>附录：核心数据速览</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>类别</th><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td><strong>规模</strong></td><td>全国机架</td><td>1085万标准机架</td></tr>
+      <tr><td><strong>规模</strong></td><td>智能算力</td><td>788 EFLOPS（FP16）</td></tr>
+      <tr><td><strong>规模</strong></td><td>计算设备总算力</td><td>962 EFLOPS</td></tr>
+      <tr><td><strong>规模</strong></td><td>存力</td><td>1680 EB</td></tr>
+      <tr><td><strong>规模</strong></td><td>大模型数量</td><td>1509个（全球40.2%）</td></tr>
+      <tr><td><strong>枢纽</strong></td><td>张家口集群</td><td>30个项目，44万架</td></tr>
+      <tr><td><strong>枢纽</strong></td><td>芜湖集群</td><td>17个项目，投资2588亿+</td></tr>
+      <tr><td><strong>枢纽</strong></td><td>贵安集群</td><td>26个中心，81 EFLOPS</td></tr>
+      <tr><td><strong>枢纽</strong></td><td>庆阳集群</td><td>3.1万架，5万P，300+企业</td></tr>
+      <tr><td><strong>枢纽</strong></td><td>中卫集群</td><td>12.6万P，智算集群第三</td></tr>
+      <tr><td><strong>互联</strong></td><td>1+M+N节点</td><td>31省155企316 EFLOPS</td></tr>
+      <tr><td><strong>互联</strong></td><td>北京平台</td><td>45家服务商，3.9万P</td></tr>
+      <tr><td><strong>互联</strong></td><td>上海平台</td><td>362家服务商，1.83万P</td></tr>
+      <tr><td><strong>节能</strong></td><td>PUE最低</td><td>1.10</td></tr>
+      <tr><td><strong>节能</strong></td><td>绿电占比目标</td><td>>80%（新建）</td></tr>
+      <tr><td><strong>产业</strong></td><td>国产品牌整机市占率</td><td>>75%</td></tr>
+      <tr><td><strong>产业</strong></td><td>华为昇腾GPU市占率</td><td>23%</td></tr>
+      <tr><td><strong>产业</strong></td><td>中国AI产业规模</td><td>>9000亿元</td></tr>
+      <tr><td><strong>全球</strong></td><td>中国算力全球占比</td><td>21%</td></tr>
+      <tr><td><strong>全球</strong></td><td>美国"星际之门"</td><td>5000亿美元</td></tr>
+      <tr><td><strong>全球</strong></td><td>欧盟AI大陆计划</td><td>2000亿欧元</td></tr>
+      <tr><td><strong>政策</strong></td><td>算力券覆盖省份</td><td>22个</td></tr>
+      <tr><td><strong>政策</strong></td><td>Token券首提</td><td>四川2026.05</td></tr>
+      <tr><td><strong>政策</strong></td><td>场景券计划</td><td>山东100亿元/3年</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer>
+  <p>本报告基于中国信通院系列蓝皮书、国家部委政策文件、权威学术期刊及公开媒体报道整理</p>
+  <p>数据截至2026年一季度至二季度（部分节点数据截至2025年底）· 具体项目以各地政府最新公示为准</p>
+</footer>
+
+</div><!-- /.main -->
+
+<!-- ════ Dynamic TOC Script ════ -->
+<script>
+(function() {
+  const toc = document.getElementById('toc');
+  const sections = document.querySelectorAll('section');
+  const links = [];
+
+  sections.forEach(sec => {
+    const h2 = sec.querySelector('h2');
+    if (!h2) return;
+
+    // Create H2 link
+    const aH2 = document.createElement('a');
+    aH2.href = '#' + sec.id;
+    aH2.textContent = h2.textContent.replace(/^[一二三四五六七八九十]+[、.]?\s*/, '').replace(/^[0-9.]+\s*/, '');
+    toc.appendChild(aH2);
+
+    const item = { a: aH2, top: sec.offsetTop, bottom: sec.offsetTop + sec.offsetHeight };
+
+    // Create H3 sub-links
+    const h3s = sec.querySelectorAll('h3');
+    h3s.forEach(h3 => {
+      const aH3 = document.createElement('a');
+      aH3.href = '#' + sec.id;
+      aH3.className = 'sub';
+      const h3Text = h3.textContent.replace(/^[0-9.]+\s*/, '');
+      aH3.textContent = '— ' + h3Text;
+      // Insert after the parent H2 link
+      aH2.insertAdjacentElement('afterend', aH3);
+    });
+
+    links.push(item);
+  });
+
+  function updateActive() {
+    const y = window.scrollY + 80;
+    let active = null;
+    for (const l of links) {
+      if (y >= l.top && y < l.bottom) { active = l; break; }
+    }
+    if (!active && links.length && y < links[0].top) active = links[0];
+    links.forEach(l => l.a.classList.toggle('active', l === active));
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+</script>
+
+</body>
+</html>
