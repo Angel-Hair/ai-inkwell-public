@@ -10,8 +10,8 @@ desktop.ini
 .vscode/
 .idea/
 
-# CodeWhale 运行时状态
-.codewhale/state/
+# CodeWhale 运行时状态（整个 .codewhale 由运行时生成，不纳入版本控制）
+.codewhale/
 
 # Playwright MCP 内部缓存
 .playwright-mcp/
