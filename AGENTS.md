@@ -7,7 +7,7 @@
 ```
 inkwell/
 ├── .github/workflows/        ← GitHub Actions（双仓同步脚本）
-├── .codewhale/skills/        ← CodeWhale Skill 定义
+├── .agents/skills/           ← CodeWhale Skill 定义（项目级）
 ├── .gitignore
 ├── reports/                  ← 研究报告总目录
 │   └── <report-name>/        ← 每个研究报告独立子目录
