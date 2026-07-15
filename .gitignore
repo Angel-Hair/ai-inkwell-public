@@ -16,5 +16,6 @@ desktop.ini
 # Playwright MCP 内部缓存
 .playwright-mcp/
 
-# 临时文件
+# 临时文件和参考文件
 tmp/
+sources/
